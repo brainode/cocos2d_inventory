@@ -26,3 +26,9 @@
 *.exe
 *.out
 *.app
+
+# Clion settings
+.idea
+
+# Framework(Just add cocos2d folder at project root folder
+cocos2d/
