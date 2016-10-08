@@ -124,7 +124,7 @@ set(GAME_HEADERS
   Classes/AppDelegate.h
         Classes/InventoryScene.h
   ${PLATFORM_SPECIFIC_HEADERS}
-        Classes/Item.cpp Classes/Item.h)
+        Classes/Items/Item.cpp Classes/Items/Item.h Classes/InventoryContainer.cpp Classes/InventoryContainer.h Classes/Items/Equipment.cpp Classes/Items/Equipment.h Classes/Actors/Hero.cpp Classes/Actors/Hero.h Classes/Items/Consumable.cpp Classes/Items/Consumable.h Classes/Items/Trash.cpp Classes/Items/Trash.h Classes/ItemCell.cpp Classes/ItemCell.h)
 
 if( ANDROID )
     add_library(${APP_NAME} SHARED ${GAME_SRC} ${GAME_HEADERS})

@@ -18,6 +18,18 @@ Scene* InventoryScene::createScene()
     return scene;
 }
 
+void InventoryScene::onMouseMove(cocos2d::Event *event){
+    cocos2d::EventMouse* e = (cocos2d::EventMouse*)event;
+    mousePos.x=e->getCursorX();
+    mousePos.y=e->getCursorY();
+//    log("X:%f | Y:%f",mousePos.x,mousePos.y);
+}
+
+void InventoryScene::onMouseDown(cocos2d::Event *event){
+    cocos2d::EventMouse* e = (cocos2d::EventMouse*)event;
+    log("X:%f | Y:%f",e->getCurrentTarget()->getAnchorPoint().x,e->getCurrentTarget()->getAnchorPoint().y);
+}
+
 // on "init" you need to initialize your instance
 bool InventoryScene::init()
 {
@@ -27,11 +39,50 @@ bool InventoryScene::init()
     {
         return false;
     }
-    
+
+    Cursor = cocos2d::Sprite::createWithSpriteFrameName("cursor");
+    addChild(Cursor,1000);
+
+
+    auto mouseListener = EventListenerMouse::create();
+    mouseListener->onMouseMove = CC_CALLBACK_1(InventoryScene::onMouseMove,this);
+
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(mouseListener,this);
+
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-    /////////////////////////////
+    /*
+     * Adding hero for testing purporses(Eqip items)
+     */
+    HeroActor = new Hero();
+    addChild(HeroActor);
+
+
+    PlayerInventory = new InventoryContainer();
+    ///Set position at center
+    PlayerInventory->setPosition(getContentSize().width/2,getContentSize().height/2);
+    addChild(PlayerInventory);
+
+
+    cocos2d::Sprite* test1 = cocos2d::Sprite::create("left_top.png");
+    test1->setPosition(0,768);
+    cocos2d::Sprite* test2 = cocos2d::Sprite::create("left_bottom.png");
+    test2->setPosition(0,0);
+    cocos2d::Sprite* test3 = cocos2d::Sprite::create("right_top.png");
+    test3->setPosition(1024,768);
+    cocos2d::Sprite* test4 = cocos2d::Sprite::create("right_bottom.png");
+    test4->setPosition(1024,0);
+
+    addChild(test1);
+    addChild(test2);
+    addChild(test3);
+    addChild(test4);
+    /*Item* Sword = new Equipment(false,false,cocos2d::Sprite::create("sword.png"),100,5,0);
+    Sword->setPosition(getContentSize().width/2+130,getContentSize().height/2);
+    addChild(Sword);*/
+
+   /* /////////////////////////////
     // 2. add a menu item with "X" image, which is clicked to quit the program
     //    you may modify it.
 
@@ -71,9 +122,18 @@ bool InventoryScene::init()
     sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
 
     // add the sprite as a child to this layer
-    this->addChild(sprite, 0);
+    this->addChild(sprite, 0);*/
+    this->scheduleUpdate();
     
     return true;
+}
+
+/*
+ * Update at every frame
+ */
+void InventoryScene::update(float delta) {
+    Cursor->setPosition(mousePos.x,mousePos.y);
+//    log("X:%f | Y:%f",mousePos.x,mousePos.y);
 }
 
 
