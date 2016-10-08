@@ -17,6 +17,8 @@ public:
     Hero* HeroActor;
 
     InventoryContainer* PlayerInventory;
+
+    static Item* IPMovedItem;
     
     // a selector callback
     void menuCloseCallback(cocos2d::Ref* pSender);

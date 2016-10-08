@@ -16,7 +16,8 @@ Equipment::Equipment(bool BIsStackableInput,
 
     this->SPItemSprite->setScaleX(0.3);
     this->SPItemSprite->setScaleY(0.3);
-    addChild(this->SPItemSprite);
+
+//    addChild(this->SPItemSprite);
 }
 
 Equipment::~Equipment() {

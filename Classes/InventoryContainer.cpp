@@ -13,6 +13,8 @@ InventoryContainer::InventoryContainer() {
         Cell.ICellNumber=UICounter;
         ++UICounter;
     }
+    this->setName("ItemContainer");
+
 }
 
 InventoryContainer::~InventoryContainer() {

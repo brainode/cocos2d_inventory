@@ -18,6 +18,8 @@ Scene* InventoryScene::createScene()
     return scene;
 }
 
+Item* InventoryScene::IPMovedItem = nullptr;
+
 void InventoryScene::onMouseMove(cocos2d::Event *event){
     cocos2d::EventMouse* e = (cocos2d::EventMouse*)event;
     mousePos.x=e->getCursorX();
@@ -64,7 +66,7 @@ bool InventoryScene::init()
     PlayerInventory->setPosition(getContentSize().width/2,getContentSize().height/2);
     addChild(PlayerInventory);
 
-
+    ///Test code for checking corners
     cocos2d::Sprite* test1 = cocos2d::Sprite::create("left_top.png");
     test1->setPosition(0,768);
     cocos2d::Sprite* test2 = cocos2d::Sprite::create("left_bottom.png");
@@ -78,9 +80,11 @@ bool InventoryScene::init()
     addChild(test2);
     addChild(test3);
     addChild(test4);
-    /*Item* Sword = new Equipment(false,false,cocos2d::Sprite::create("sword.png"),100,5,0);
-    Sword->setPosition(getContentSize().width/2+130,getContentSize().height/2);
-    addChild(Sword);*/
+    /////
+
+    Item* Sword = new Equipment(false,false,cocos2d::Sprite::createWithSpriteFrameName("sword"),100,5,0);
+    Sword->setPosition(getContentSize().width/2,getContentSize().height/2);
+    addChild(Sword);
 
    /* /////////////////////////////
     // 2. add a menu item with "X" image, which is clicked to quit the program

@@ -6,7 +6,7 @@
 #define MYGAME_ITEM_H
 
 
-#include <2d/CCSprite.h>
+#include "cocos2d.h"
 
 class Item : public cocos2d::Node {
 
@@ -18,10 +18,17 @@ public:
 
     float FItemCost;
 
-//    virtual void Use(void *AffectedObject) = 0;
-
     Item(bool BIsStackableInput,bool BIsUsedInQuestInput,cocos2d::Sprite* SPItemSpriteInput,float FItemCostInput);
     ~Item();
+
+    bool BIsGrabByUser;
+
+    /*
+     * Mouse events for moving Items
+     */
+    void addEvents();
+
+    bool BIsHit(cocos2d::EventMouse* EInput);
 };
 
 

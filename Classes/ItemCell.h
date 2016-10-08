@@ -6,7 +6,6 @@
 #define MYGAME_ITEMCELL_H
 
 #include <Items/Item.h>
-#include "cocos2d.h"
 
 class ItemCell : public cocos2d::Node {
 public:
@@ -16,8 +15,6 @@ public:
     ///Label,that present ItemCount in cell to player
     cocos2d::Label* LItemCount;
 
-    cocos2d::Sprite* tmp;
-
     cocos2d::Sprite* SCellBg;
 
     int ICellNumber;
@@ -26,6 +23,8 @@ public:
     ~ItemCell();
 
     void addEvents();
+
+    bool BIsHit(cocos2d::EventMouse* EInput);
 };
 
 

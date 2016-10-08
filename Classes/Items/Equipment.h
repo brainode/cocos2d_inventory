@@ -22,6 +22,7 @@ public:
               unsigned int UIItemEffectStrenghtInput,
               unsigned int UIItemEffectSpeedInput);
     ~Equipment();
+
 };
 
 
