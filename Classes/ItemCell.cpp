@@ -21,8 +21,6 @@ ItemCell::ItemCell(){
 
     this->ICellNumber=0;
 
-    this->addEvents();
-
     this->setName("ItemCell");
 }
 
@@ -30,7 +28,7 @@ ItemCell::~ItemCell(){
 
 }
 
-bool ItemCell::BIsHit(cocos2d::EventMouse *EInput) {
+/*bool ItemCell::BIsHit(cocos2d::EventMouse *EInput) {
     cocos2d::Vec2 V2MouseLocation = EInput->getLocation();
     ///Converting mouse location to global world location(Y)
     V2MouseLocation.y=cocos2d::Director::getInstance()->getWinSize().height-V2MouseLocation.y;
@@ -41,8 +39,9 @@ bool ItemCell::BIsHit(cocos2d::EventMouse *EInput) {
     ///Convert Rect to world space
     cocos2d::Rect RSpriteWorldPosition = cocos2d::Rect(V2LeftBottomWorldPoint.x,V2LeftBottomWorldPoint.y,this->SCellBg->getContentSize().width,this->SCellBg->getContentSize().height);
     return RSpriteWorldPosition.containsPoint(V2MouseLocation);
-}
+}*/
 
+/*
 void ItemCell::addEvents() {
     auto listener = cocos2d::EventListenerMouse::create();
     listener->onMouseDown = [this](cocos2d::Event* event){
@@ -64,3 +63,4 @@ void ItemCell::addEvents() {
     };
     cocos2d::Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(listener,30);
 }
+*/

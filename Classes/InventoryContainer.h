@@ -12,6 +12,8 @@
 #include "cocos2d.h"
 #include "ItemCell.h"
 
+//enum class sorttype {price,type};
+
 class InventoryContainer : public cocos2d::Node {
 private:
 
@@ -20,7 +22,15 @@ public:
 
     InventoryContainer();
     ~InventoryContainer();
-    void AddItem(Item* InputItem);
+
+    void addEvents();
+
+    ItemCell* icIsHit(cocos2d::EventMouse* EInput);
+
+    void addItem(Item* InputItem,unsigned int UICellClicked);
+    void swapCells(unsigned int UICellFrom,unsigned int UICellTo);
+    void clearCell(unsigned int UICellToClear);
+//    void sortInventory(enum ETypeSort);
 
 };
 

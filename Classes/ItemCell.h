@@ -22,9 +22,9 @@ public:
     ItemCell();
     ~ItemCell();
 
-    void addEvents();
+//    void addEvents();
 
-    bool BIsHit(cocos2d::EventMouse* EInput);
+//    bool BIsHit(cocos2d::EventMouse* EInput);
 };
 
 

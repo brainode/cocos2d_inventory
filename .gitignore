@@ -32,3 +32,7 @@
 
 # Framework(Just add cocos2d folder at project root folder
 cocos2d/
+
+#Visual Paradigm rubbish
+*.vpp.lck
+*.vpp.bak*
