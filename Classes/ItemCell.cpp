@@ -22,6 +22,7 @@ ItemCell::ItemCell(){
     this->ICellNumber=0;
 
     this->setName("ItemCell");
+
 }
 
 ItemCell::~ItemCell(){

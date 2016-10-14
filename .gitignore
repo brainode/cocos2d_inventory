@@ -36,3 +36,6 @@ cocos2d/
 #Visual Paradigm rubbish
 *.vpp.lck
 *.vpp.bak*
+
+#Vim tmp
+*.cpp.sw*

@@ -25,6 +25,8 @@ public:
 
     void addEvents();
 
+    ItemCell* ICCellForSwap;
+
     ItemCell* icIsHit(cocos2d::EventMouse* EInput);
 
     void addItem(Item* InputItem,unsigned int UICellClicked);
