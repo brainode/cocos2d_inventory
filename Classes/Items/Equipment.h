@@ -19,8 +19,7 @@ public:
               bool BIsUsedInQuestInput,
               cocos2d::Sprite* SPItemSpriteInput,
               float FItemCostInput,
-              unsigned int UIItemEffectStrenghtInput,
-              unsigned int UIItemEffectSpeedInput);
+              int UIItemEffectStrenghtInput);
     ~Equipment();
 
 };

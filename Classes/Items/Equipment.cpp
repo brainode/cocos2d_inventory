@@ -8,11 +8,10 @@ Equipment::Equipment(bool BIsStackableInput,
                      bool BIsUsedInQuestInput,
                      cocos2d::Sprite* SPItemSpriteInput,
                      float FItemCostInput,
-                     unsigned int UIItemEffectStrenghtInput,
-                     unsigned int UIItemEffectSpeedInput):Item(BIsStackableInput,BIsUsedInQuestInput,SPItemSpriteInput,FItemCostInput)
+                     int UIItemEffectStrenghtInput
+):Item(BIsStackableInput,BIsUsedInQuestInput,SPItemSpriteInput,FItemCostInput)
 {
     this->UIItemEffectStrenght=UIItemEffectStrenghtInput;
-    this->UIItemEffectSpeed=UIItemEffectSpeedInput;
 
     this->SPItemSprite->setScaleX(0.3);
     this->SPItemSprite->setScaleY(0.3);

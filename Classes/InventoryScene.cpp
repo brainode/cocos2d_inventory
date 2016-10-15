@@ -1,3 +1,4 @@
+#include <Items/Consumable.h>
 #include "InventoryScene.h"
 #include "SimpleAudioEngine.h"
 
@@ -82,9 +83,17 @@ bool InventoryScene::init()
     addChild(test4);
     /////
 
-    Item* Sword = new Equipment(false,false,cocos2d::Sprite::createWithSpriteFrameName("sword"),100,5,0);
-    Sword->setPosition(getContentSize().width/2,getContentSize().height/2);
+    Item* Sword = new Equipment(true,false,cocos2d::Sprite::createWithSpriteFrameName("sword"),100,5);
+    Sword->setPosition(getContentSize().width/2-150,getContentSize().height/2);
     addChild(Sword);
+
+    Item* Sword2 = new Equipment(true,false,cocos2d::Sprite::createWithSpriteFrameName("sword"),100,5);
+    Sword2->setPosition(getContentSize().width/2-150,getContentSize().height/2-200);
+    addChild(Sword2);
+
+    Item* HealtPotion = new Consumable(true,false,cocos2d::Sprite::createWithSpriteFrameName("health_potion"),100);
+    HealtPotion->setPosition(getContentSize().width/2-150,getContentSize().height/2-300);
+    addChild(HealtPotion);
 
    /* /////////////////////////////
     // 2. add a menu item with "X" image, which is clicked to quit the program

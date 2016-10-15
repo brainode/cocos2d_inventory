@@ -43,8 +43,8 @@ void Item::addEvents() {
     auto listener = cocos2d::EventListenerMouse::create();
     listener->onMouseDown = [this](cocos2d::Event* event){
         cocos2d::EventMouse* EM = (cocos2d::EventMouse*)event;
-        if(this->BIsHit(EM)){
-            cocos2d::log("Item cost: %f", this->FItemCost);
+        if(this->BIsHit(EM) && EM->getMouseButton()==MOUSE_BUTTON_LEFT){
+//            cocos2d::log("Item cost: %f", this->FItemCost);
             this->BIsGrabByUser = true;
             InventoryScene::IPMovedItem = this;
         }
@@ -60,7 +60,6 @@ void Item::addEvents() {
     };
     listener->onMouseUp = [this](cocos2d::Event* event){
         this->BIsGrabByUser = false;
-        //InventoryScene::IPMovedItem = nullptr;
     };
 
     cocos2d::Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(listener,30);
