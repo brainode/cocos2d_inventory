@@ -1,4 +1,5 @@
 #include <Items/Consumable.h>
+#include <Items/Trash.h>
 #include "InventoryScene.h"
 #include "SimpleAudioEngine.h"
 
@@ -83,17 +84,40 @@ bool InventoryScene::init()
     addChild(test4);
     /////
 
-    Item* Sword = new Equipment(true,false,cocos2d::Sprite::createWithSpriteFrameName("sword"),100,5);
+    Item* Sword = new Equipment(ExactItem::SWORD,false,cocos2d::Sprite::createWithSpriteFrameName("sword"),100,5);
     Sword->setPosition(getContentSize().width/2-150,getContentSize().height/2);
     addChild(Sword);
 
-    Item* Sword2 = new Equipment(true,false,cocos2d::Sprite::createWithSpriteFrameName("sword"),100,5);
-    Sword2->setPosition(getContentSize().width/2-150,getContentSize().height/2-200);
-    addChild(Sword2);
+    Item* Torch = new Equipment(ExactItem::TORCH,false,cocos2d::Sprite::createWithSpriteFrameName("torch"),100,5);
+    Torch->setPosition(getContentSize().width/2-250,getContentSize().height/2);
+    addChild(Torch);
 
-    Item* HealtPotion = new Consumable(true,false,cocos2d::Sprite::createWithSpriteFrameName("health_potion"),100);
-    HealtPotion->setPosition(getContentSize().width/2-150,getContentSize().height/2-300);
+    Item* HealtPotion = new Consumable(ExactItem::HEALTH_POTION,true,cocos2d::Sprite::createWithSpriteFrameName("health_potion"),20);
+    HealtPotion->setPosition(getContentSize().width/2-150,getContentSize().height/2-150);
     addChild(HealtPotion);
+
+    ///Custom quest number 5
+    Item* Key = new Trash(ExactItem::KEY,false,cocos2d::Sprite::createWithSpriteFrameName("key"),20,5);
+    Key->setPosition(getContentSize().width/2-150,getContentSize().height/2-250);
+    addChild(Key);
+    ///Custom quest number 5
+    Item* Key2 = new Trash(ExactItem::KEY,false,cocos2d::Sprite::createWithSpriteFrameName("key"),20,5);
+    Key2->setPosition(getContentSize().width/2-150,getContentSize().height/2-350);
+    addChild(Key2);
+
+    ///Custom quest number 5
+    Item* HornAndHooves = new Trash(ExactItem::HORN_AND_HOOVIES,true,cocos2d::Sprite::createWithSpriteFrameName("horn_and_hooves"),20,5);
+    HornAndHooves->setPosition(getContentSize().width/2-150,getContentSize().height/2+150);
+    addChild(HornAndHooves);
+
+    ///Custom quest number 5
+    Item* HornAndHooves2 = new Trash(ExactItem::HORN_AND_HOOVIES,true,cocos2d::Sprite::createWithSpriteFrameName("horn_and_hooves"),20,5);
+    HornAndHooves2->setPosition(getContentSize().width/2-250,getContentSize().height/2+150);
+    addChild(HornAndHooves2);
+
+    Item* SpeedPotion = new Consumable(ExactItem::SPEED_POTION,true,cocos2d::Sprite::createWithSpriteFrameName("speed_potion"),20);
+    SpeedPotion->setPosition(getContentSize().width/2-150,getContentSize().height/2+250);
+    addChild(SpeedPotion);
 
    /* /////////////////////////////
     // 2. add a menu item with "X" image, which is clicked to quit the program

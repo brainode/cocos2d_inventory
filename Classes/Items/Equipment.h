@@ -9,17 +9,19 @@
 
 class Equipment : public Item{
 public:
-    unsigned int //UIItemEffectVitality,
-            UIItemEffectStrenght,
+    int //UIItemEffectVitality,
+            IItemEffectStrenght;
 //            UIItemEffectAgility,
 //                UIRequiredMana,
-            UIItemEffectSpeed;
+//            IItemEffectSpeed;
 
-    Equipment(bool BIsStackableInput,
-              bool BIsUsedInQuestInput,
+    Equipment(ExactItem EInputItemType,
+              bool BIsStackableInput,
               cocos2d::Sprite* SPItemSpriteInput,
               float FItemCostInput,
-              int UIItemEffectStrenghtInput);
+              int IItemEffectStrenghtInput=0,
+              int IQuestIDInput=-1
+    );
     ~Equipment();
 
 };

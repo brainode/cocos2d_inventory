@@ -20,6 +20,7 @@ public:
     int ICellNumber;
 
     ItemCell();
+
     ~ItemCell();
 
 //    void addEvents();

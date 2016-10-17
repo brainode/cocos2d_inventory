@@ -4,19 +4,15 @@
 
 #include "Equipment.h"
 
-Equipment::Equipment(bool BIsStackableInput,
-                     bool BIsUsedInQuestInput,
+Equipment::Equipment(ExactItem EInputItemType,
+                     bool BIsStackableInput,
                      cocos2d::Sprite* SPItemSpriteInput,
                      float FItemCostInput,
-                     int UIItemEffectStrenghtInput
-):Item(BIsStackableInput,BIsUsedInQuestInput,SPItemSpriteInput,FItemCostInput)
+                     int IItemEffectStrenghtInput,
+                     int IQuestIDInput
+):Item(EInputItemType,BIsStackableInput,SPItemSpriteInput,FItemCostInput,IQuestIDInput)
 {
-    this->UIItemEffectStrenght=UIItemEffectStrenghtInput;
-
-    this->SPItemSprite->setScaleX(0.3);
-    this->SPItemSprite->setScaleY(0.3);
-
-//    addChild(this->SPItemSprite);
+    this->IItemEffectStrenght=IItemEffectStrenghtInput;
 }
 
 Equipment::~Equipment() {

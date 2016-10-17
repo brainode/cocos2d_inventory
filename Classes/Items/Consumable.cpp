@@ -4,13 +4,12 @@
 
 #include "Consumable.h"
 
-Consumable::Consumable(bool BIsStackableInput,
-                       bool BIsUsedInQuestInput,
+Consumable::Consumable(ExactItem EInputItemType,
+                       bool BIsStackableInput,
                        cocos2d::Sprite* SPItemSpriteInput,
-                       float FItemCostInput
-):Item(BIsStackableInput,BIsUsedInQuestInput,SPItemSpriteInput,FItemCostInput) {
-    this->SPItemSprite->setScaleX(0.3);
-    this->SPItemSprite->setScaleY(0.3);
+                       float FItemCostInput,
+                       int IQuestIDInput
+):Item(EInputItemType,BIsStackableInput,SPItemSpriteInput,FItemCostInput,IQuestIDInput) {
 }
 
 Consumable::~Consumable() {

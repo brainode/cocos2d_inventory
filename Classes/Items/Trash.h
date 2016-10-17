@@ -10,7 +10,7 @@
 
 class Trash : public Item {
 public:
-    Trash(bool BIsStackableInput,bool BIsUsedInQuestInput,cocos2d::Sprite* SPItemSpriteInput,float FItemCostInput);
+    Trash(ExactItem EInputItemType,bool BIsUsedInQuestInput,cocos2d::Sprite* SPItemSpriteInput,float FItemCostInput,int IQuestIDInput=-1);
     ~Trash();
 };
 

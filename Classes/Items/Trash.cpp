@@ -5,7 +5,12 @@
 #include "Trash.h"
 
 
-Trash::Trash(bool BIsStackableInput,bool BIsUsedInQuestInput,cocos2d::Sprite* SPItemSpriteInput,float FItemCostInput):Item(BIsStackableInput,BIsUsedInQuestInput,SPItemSpriteInput,FItemCostInput){
+Trash::Trash(ExactItem EInputItemType,
+             bool BIsStackableInput,
+             cocos2d::Sprite* SPItemSpriteInput,
+             float FItemCostInput,
+             int IQuestIDInput
+):Item(EInputItemType,BIsStackableInput,SPItemSpriteInput,FItemCostInput,IQuestIDInput){
 
 }
 
