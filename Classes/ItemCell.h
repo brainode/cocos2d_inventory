@@ -20,12 +20,19 @@ public:
     int ICellNumber;
 
     ItemCell();
+    /*
+     *Copy constructor
+    */
+    ItemCell(ItemCell& CellToCopy);
+    /*
+    *Move constructor
+    */
+    ItemCell(ItemCell&& CellToMove);
+
+    ItemCell& operator=(const ItemCell& CellToCopy);
 
     ~ItemCell();
 
-//    void addEvents();
-
-//    bool BIsHit(cocos2d::EventMouse* EInput);
 };
 
 

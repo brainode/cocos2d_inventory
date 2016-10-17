@@ -88,13 +88,25 @@ bool InventoryScene::init()
     Sword->setPosition(getContentSize().width/2-150,getContentSize().height/2);
     addChild(Sword);
 
-    Item* Torch = new Equipment(ExactItem::TORCH,false,cocos2d::Sprite::createWithSpriteFrameName("torch"),100,5);
+    Item* Torch = new Equipment(ExactItem::TORCH,false,cocos2d::Sprite::createWithSpriteFrameName("torch"),80,5);
     Torch->setPosition(getContentSize().width/2-250,getContentSize().height/2);
     addChild(Torch);
 
-    Item* HealtPotion = new Consumable(ExactItem::HEALTH_POTION,true,cocos2d::Sprite::createWithSpriteFrameName("health_potion"),20);
+    Item* HealtPotion = new Consumable(ExactItem::HEALTH_POTION,true,cocos2d::Sprite::createWithSpriteFrameName("health_potion"),35);
     HealtPotion->setPosition(getContentSize().width/2-150,getContentSize().height/2-150);
     addChild(HealtPotion);
+
+    Item* HealtPotion2 = new Consumable(ExactItem::HEALTH_POTION,true,cocos2d::Sprite::createWithSpriteFrameName("health_potion"),35);
+    HealtPotion2->setPosition(getContentSize().width/2-250,getContentSize().height/2-150);
+    addChild(HealtPotion2);
+
+    Item* HealtPotion3 = new Consumable(ExactItem::HEALTH_POTION,true,cocos2d::Sprite::createWithSpriteFrameName("health_potion"),35);
+    HealtPotion3->setPosition(getContentSize().width/2-350,getContentSize().height/2-150);
+    addChild(HealtPotion3);
+
+    Item* HealtPotion4 = new Consumable(ExactItem::HEALTH_POTION,true,cocos2d::Sprite::createWithSpriteFrameName("health_potion"),35);
+    HealtPotion4->setPosition(getContentSize().width/2-350,getContentSize().height/2-150);
+    addChild(HealtPotion4);
 
     ///Custom quest number 5
     Item* Key = new Trash(ExactItem::KEY,false,cocos2d::Sprite::createWithSpriteFrameName("key"),20,5);
@@ -106,16 +118,16 @@ bool InventoryScene::init()
     addChild(Key2);
 
     ///Custom quest number 5
-    Item* HornAndHooves = new Trash(ExactItem::HORN_AND_HOOVIES,true,cocos2d::Sprite::createWithSpriteFrameName("horn_and_hooves"),20,5);
+    Item* HornAndHooves = new Trash(ExactItem::HORN_AND_HOOVIES,true,cocos2d::Sprite::createWithSpriteFrameName("horn_and_hooves"),5,5);
     HornAndHooves->setPosition(getContentSize().width/2-150,getContentSize().height/2+150);
     addChild(HornAndHooves);
 
     ///Custom quest number 5
-    Item* HornAndHooves2 = new Trash(ExactItem::HORN_AND_HOOVIES,true,cocos2d::Sprite::createWithSpriteFrameName("horn_and_hooves"),20,5);
+    Item* HornAndHooves2 = new Trash(ExactItem::HORN_AND_HOOVIES,true,cocos2d::Sprite::createWithSpriteFrameName("horn_and_hooves"),5,5);
     HornAndHooves2->setPosition(getContentSize().width/2-250,getContentSize().height/2+150);
     addChild(HornAndHooves2);
 
-    Item* SpeedPotion = new Consumable(ExactItem::SPEED_POTION,true,cocos2d::Sprite::createWithSpriteFrameName("speed_potion"),20);
+    Item* SpeedPotion = new Consumable(ExactItem::SPEED_POTION,true,cocos2d::Sprite::createWithSpriteFrameName("speed_potion"),35);
     SpeedPotion->setPosition(getContentSize().width/2-150,getContentSize().height/2+250);
     addChild(SpeedPotion);
 
