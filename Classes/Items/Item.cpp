@@ -7,8 +7,8 @@
 #include "Item.h"
 
 
-Item::Item(ExactItem EInputItemType,bool BIsStackableInput,cocos2d::Sprite* SPItemSpriteInput,float FItemCostInput,int IQuestIDInput) {
-    this->EItemType=EInputItemType;
+Item::Item(int IItemIDInput,bool BIsStackableInput,cocos2d::Sprite* SPItemSpriteInput,float FItemCostInput,int IQuestIDInput) {
+    this->IItemID = IItemIDInput;
 
     this->BIsStackable=BIsStackableInput;
 
@@ -29,8 +29,30 @@ Item::Item(ExactItem EInputItemType,bool BIsStackableInput,cocos2d::Sprite* SPIt
     this->setScaleY(0.3);
 }
 
-Item::~Item() {
+Item::Item(const Item& ItemInput){
+    this->IItemID = ItemInput.IItemID;
 
+    this->BIsStackable=ItemInput.BIsStackable;
+
+    this->IQuestID=ItemInput.IQuestID;
+
+    this->SPItemSprite= cocos2d::Sprite::createWithSpriteFrameName(ItemInput.SPItemSprite->getName());
+    addChild(this->SPItemSprite);
+
+    this->FItemCost = ItemInput.FItemCost;
+
+    this->BIsGrabByUser = false;
+
+    this->addEvents();
+
+    this->setName("Item");
+
+    this->setScaleX(0.3);
+    this->setScaleY(0.3);
+}
+
+Item::~Item() {
+    this->removeAllChildrenWithCleanup(true);
 }
 
 bool Item::BIsHit(cocos2d::EventMouse *EInput) {

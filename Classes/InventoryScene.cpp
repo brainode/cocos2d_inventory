@@ -84,94 +84,54 @@ bool InventoryScene::init()
     addChild(test4);
     /////
 
-    Item* Sword = new Equipment(ExactItem::SWORD,false,cocos2d::Sprite::createWithSpriteFrameName("sword"),100,5);
+    Item* Sword = new Equipment(1,false,cocos2d::Sprite::createWithSpriteFrameName("sword"),100);
     Sword->setPosition(getContentSize().width/2-150,getContentSize().height/2);
     addChild(Sword);
 
-    Item* Torch = new Equipment(ExactItem::TORCH,false,cocos2d::Sprite::createWithSpriteFrameName("torch"),80,5);
+    Item* Torch = new Equipment(1,false,cocos2d::Sprite::createWithSpriteFrameName("torch"),80,0);
     Torch->setPosition(getContentSize().width/2-250,getContentSize().height/2);
     addChild(Torch);
 
-    Item* HealtPotion = new Consumable(ExactItem::HEALTH_POTION,true,cocos2d::Sprite::createWithSpriteFrameName("health_potion"),35);
+    Item* HealtPotion = new Consumable(1,true,cocos2d::Sprite::createWithSpriteFrameName("health_potion"),35);
     HealtPotion->setPosition(getContentSize().width/2-150,getContentSize().height/2-150);
     addChild(HealtPotion);
 
-    Item* HealtPotion2 = new Consumable(ExactItem::HEALTH_POTION,true,cocos2d::Sprite::createWithSpriteFrameName("health_potion"),35);
+    Item* HealtPotion2 = new Consumable(1,true,cocos2d::Sprite::createWithSpriteFrameName("health_potion"),35);
     HealtPotion2->setPosition(getContentSize().width/2-250,getContentSize().height/2-150);
     addChild(HealtPotion2);
 
-    Item* HealtPotion3 = new Consumable(ExactItem::HEALTH_POTION,true,cocos2d::Sprite::createWithSpriteFrameName("health_potion"),35);
+    Item* HealtPotion3 = new Consumable(1,true,cocos2d::Sprite::createWithSpriteFrameName("health_potion"),35);
     HealtPotion3->setPosition(getContentSize().width/2-350,getContentSize().height/2-150);
     addChild(HealtPotion3);
 
-    Item* HealtPotion4 = new Consumable(ExactItem::HEALTH_POTION,true,cocos2d::Sprite::createWithSpriteFrameName("health_potion"),35);
+    Item* HealtPotion4 = new Consumable(1,true,cocos2d::Sprite::createWithSpriteFrameName("health_potion"),35);
     HealtPotion4->setPosition(getContentSize().width/2-350,getContentSize().height/2-150);
     addChild(HealtPotion4);
 
     ///Custom quest number 5
-    Item* Key = new Trash(ExactItem::KEY,false,cocos2d::Sprite::createWithSpriteFrameName("key"),20,5);
+    Item* Key = new Trash(1,false,cocos2d::Sprite::createWithSpriteFrameName("key"),20,5);
     Key->setPosition(getContentSize().width/2-150,getContentSize().height/2-250);
     addChild(Key);
     ///Custom quest number 5
-    Item* Key2 = new Trash(ExactItem::KEY,false,cocos2d::Sprite::createWithSpriteFrameName("key"),20,5);
+    Item* Key2 = new Trash(1,false,cocos2d::Sprite::createWithSpriteFrameName("key"),20,5);
     Key2->setPosition(getContentSize().width/2-150,getContentSize().height/2-350);
     addChild(Key2);
 
     ///Custom quest number 5
-    Item* HornAndHooves = new Trash(ExactItem::HORN_AND_HOOVIES,true,cocos2d::Sprite::createWithSpriteFrameName("horn_and_hooves"),5,5);
+    Item* HornAndHooves = new Trash(2,true,cocos2d::Sprite::createWithSpriteFrameName("horn_and_hooves"),500,5);
     HornAndHooves->setPosition(getContentSize().width/2-150,getContentSize().height/2+150);
     addChild(HornAndHooves);
 
     ///Custom quest number 5
-    Item* HornAndHooves2 = new Trash(ExactItem::HORN_AND_HOOVIES,true,cocos2d::Sprite::createWithSpriteFrameName("horn_and_hooves"),5,5);
+    Item* HornAndHooves2 = new Trash(2,true,cocos2d::Sprite::createWithSpriteFrameName("horn_and_hooves"),500,5);
     HornAndHooves2->setPosition(getContentSize().width/2-250,getContentSize().height/2+150);
     addChild(HornAndHooves2);
 
-    Item* SpeedPotion = new Consumable(ExactItem::SPEED_POTION,true,cocos2d::Sprite::createWithSpriteFrameName("speed_potion"),35);
+    Item* SpeedPotion = new Consumable(2,true,cocos2d::Sprite::createWithSpriteFrameName("speed_potion"),35);
     SpeedPotion->setPosition(getContentSize().width/2-150,getContentSize().height/2+250);
     addChild(SpeedPotion);
 
-   /* /////////////////////////////
-    // 2. add a menu item with "X" image, which is clicked to quit the program
-    //    you may modify it.
 
-    // add a "close" icon to exit the progress. it's an autorelease object
-    auto closeItem = MenuItemImage::create(
-                                           "CloseNormal.png",
-                                           "CloseSelected.png",
-                                           CC_CALLBACK_1(InventoryScene::menuCloseCallback, this));
-    
-    closeItem->setPosition(Vec2(origin.x + visibleSize.width - closeItem->getContentSize().width/2 ,
-                                origin.y + closeItem->getContentSize().height/2));
-
-    // create menu, it's an autorelease object
-    auto menu = Menu::create(closeItem, NULL);
-    menu->setPosition(Vec2::ZERO);
-    this->addChild(menu, 1);
-
-    /////////////////////////////
-    // 3. add your codes below...
-
-    // add a label shows "Hello World"
-    // create and initialize a label
-    
-    auto label = Label::createWithTTF("Hello World", "fonts/Marker Felt.ttf", 24);
-    
-    // position the label on the center of the screen
-    label->setPosition(Vec2(origin.x + visibleSize.width/2,
-                            origin.y + visibleSize.height - label->getContentSize().height));
-
-    // add the label as a child to this layer
-    this->addChild(label, 1);
-
-    // add "HelloWorld" splash screen"
-    auto sprite = Sprite::create("HelloWorld.png");
-
-    // position the sprite on the center of the screen
-    sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
-
-    // add the sprite as a child to this layer
-    this->addChild(sprite, 0);*/
     this->scheduleUpdate();
     
     return true;
@@ -182,7 +142,6 @@ bool InventoryScene::init()
  */
 void InventoryScene::update(float delta) {
     Cursor->setPosition(mousePos.x,mousePos.y);
-//    log("X:%f | Y:%f",mousePos.x,mousePos.y);
 }
 
 

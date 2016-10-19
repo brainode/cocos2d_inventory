@@ -15,7 +15,7 @@ public:
 //                UIRequiredMana,
 //            IItemEffectSpeed;
 
-    Equipment(ExactItem EInputItemType,
+    Equipment(int IItemIdInput,
               bool BIsStackableInput,
               cocos2d::Sprite* SPItemSpriteInput,
               float FItemCostInput,

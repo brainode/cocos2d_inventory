@@ -4,12 +4,17 @@
 
 #include "Consumable.h"
 
-Consumable::Consumable(ExactItem EInputItemType,
+Consumable::Consumable(int IItemIdInput,
                        bool BIsStackableInput,
                        cocos2d::Sprite* SPItemSpriteInput,
                        float FItemCostInput,
                        int IQuestIDInput
-):Item(EInputItemType,BIsStackableInput,SPItemSpriteInput,FItemCostInput,IQuestIDInput) {
+):Item(IItemIdInput,BIsStackableInput,SPItemSpriteInput,FItemCostInput,IQuestIDInput) {
+	this->EItemType = ItemType::ConsumableType;
+}
+
+Consumable::Consumable(const Consumable& ConsumableInput):Item(ConsumableInput){
+    this->EItemType = ItemType::ConsumableType;
 }
 
 Consumable::~Consumable() {

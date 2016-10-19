@@ -16,7 +16,8 @@ public:
 //                UIRequiredMana,
             UIItemEffectSpeed;
 
-    Consumable(ExactItem EInputItemType,bool BIsStackableInput,cocos2d::Sprite* SPItemSpriteInput,float FItemCostInput,int IQuestIDInput=-1);
+    Consumable(int IItemIdInput,bool BIsStackableInput,cocos2d::Sprite* SPItemSpriteInput,float FItemCostInput,int IQuestIDInput=-1);
+    Consumable(const Consumable& ConsumableInput);
     ~Consumable();
 };
 

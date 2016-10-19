@@ -5,13 +5,13 @@
 #include "Trash.h"
 
 
-Trash::Trash(ExactItem EInputItemType,
+Trash::Trash(int IItemIdInput,
              bool BIsStackableInput,
              cocos2d::Sprite* SPItemSpriteInput,
              float FItemCostInput,
              int IQuestIDInput
-):Item(EInputItemType,BIsStackableInput,SPItemSpriteInput,FItemCostInput,IQuestIDInput){
-
+):Item(IItemIdInput,BIsStackableInput,SPItemSpriteInput,FItemCostInput,IQuestIDInput){
+	this->EItemType = ItemType::TrashType;
 }
 
 Trash::~Trash(){}

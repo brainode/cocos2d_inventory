@@ -8,24 +8,26 @@
 
 #include "cocos2d.h"
 
-enum ExactItem{SWORD,HEALTH_POTION,SPEED_POTION,TORCH,HORN_AND_HOOVIES,KEY};
+enum ItemType{EquipmentType=6,ConsumableType=4,TrashType=2};
 
 class Item : public cocos2d::Node {
 
 public:
     bool BIsStackable;
     int IQuestID;
+	int IItemID;
 
     cocos2d::Sprite* SPItemSprite;
 
     float FItemCost;
 
-    Item(ExactItem ItemType,bool BIsStackableInput,cocos2d::Sprite* SPItemSpriteInput,float FItemCostInput,int IQuestIDInput);
+    Item(int IItemID,bool BIsStackableInput,cocos2d::Sprite* SPItemSpriteInput,float FItemCostInput,int IQuestIDInput);
+    Item(const Item& ItemInput);
     ~Item();
 
     bool BIsGrabByUser;
 
-    ExactItem EItemType;
+    ItemType EItemType;
 
     /*
      * Mouse events for moving Items

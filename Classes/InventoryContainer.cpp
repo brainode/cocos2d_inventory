@@ -1,6 +1,7 @@
 //
 // Created by rusbaron on 10/5/16.
 //
+#include <Items/Consumable.h>
 #include "InventoryContainer.h"
 #include "InventoryScene.h"
 
@@ -48,12 +49,15 @@ InventoryContainer::InventoryContainer() {
 
     cocos2d::ui::Button* ButTypeSortButton = cocos2d::ui::Button::create("menubutton.png","menubutton_pressed.png");
     ButTypeSortButton->setTitleText("Sort by Type");
-    ButTypeSortButton->setTitleColor(cocos2d::Color3B::BLACK); //WTF?Doesn't work
+    ButTypeSortButton->setTitleColor(cocos2d::Color3B::BLACK); //Doesn't work on linux(Maybe when sprite and label debug set to 1)
     ButTypeSortButton->setTitleFontSize(UIFontSize);
     ButTypeSortButton->setPosition(cocos2d::Vec2(
             this->Inventory.at(_CELL_IN_ROW-1).getPosition().x-this->Inventory.at(_CELL_IN_ROW-1).SCellBg->getContentSize().width/2,
             this->Inventory.at(_CELL_IN_ROW-1).getPosition().y-this->Inventory.at(_CELL_IN_ROW-1).SCellBg->getContentSize().height/2-ButTypeSortButton->getContentSize().height/2
     ));
+	ButTypeSortButton->addClickEventListener([this](cocos2d::Ref* sender) {
+		this->sortInventory(ESortType::TYPE);
+	});
     addChild(ButTypeSortButton);
 
     this->setName("ItemContainer");
@@ -116,12 +120,18 @@ void InventoryContainer::addEvents() {
         else if(IItemCellUnderMouse<0 && this->ICellForSwap>=0 && this->Inventory.at(ICellForSwap).IPItemInCell!= nullptr){
             ///Check that item not quest.
             if(this->Inventory.at(ICellForSwap).IPItemInCell->IQuestID<0){
+                cocos2d::Vec2 V2MouseLocation = EM->getLocation();
+                ///Converting mouse location to global world location(Y)
+                V2MouseLocation.y=cocos2d::Director::getInstance()->getWinSize().height-V2MouseLocation.y;
+                ItemCell& CellToClear = this->Inventory.at(ICellForSwap);
+                for(int IIter = 0;IIter<CellToClear.IItemCount;IIter++){
+                    //Create copies of object,put them at mouse position
+                }
                 this->clearCell(ICellForSwap);
             }else{
                 InventoryScene::IPMovedItem->setPosition(this->convertToWorldSpace(this->Inventory.at(ICellForSwap).getPosition()));
                 this->showMessage(std::string("Quest item can't be removed!"));
             }
-
         }
         InventoryScene::IPMovedItem = nullptr;
         this->ICellForSwap=-1;
@@ -170,45 +180,24 @@ void InventoryContainer::swapCells(unsigned int UICellFrom,unsigned int UICellTo
         CellTo = CellFrom;
         CellFrom = Tmp;
     }
-    /*///Copy Cell content into "tmp cell"
-    Item* IPItemForSwap = CellTo.IPItemInCell;
-    int ISwapItemCount = CellTo.IItemCount;
-    float FSwapCellCost = CellTo.ICellCost;
-
-    CellTo.IPItemInCell = CellFrom.IPItemInCell;
-    CellTo.IItemCount = CellFrom.IItemCount;
-    CellTo.ICellCost = CellFrom.ICellCost;
-
-    CellFrom.IPItemInCell = IPItemForSwap;
-    CellFrom.IItemCount = ISwapItemCount;
-    CellFrom.ICellCost = FSwapCellCost;
-
-    if(CellTo.IPItemInCell!= nullptr) {
-        CellTo.IPItemInCell->setPosition(this->convertToWorldSpace(CellTo.getPosition()));
-    }
-    if(CellFrom.IPItemInCell!= nullptr){
-        CellFrom.IPItemInCell->setPosition(this->convertToWorldSpace(CellFrom.getPosition()));
-    }
-    this->updateCellCounter(UICellFrom);
-    this->updateCellCounter(UICellTo);*/
 }
 
 void InventoryContainer::clearCell(unsigned int UICellToClear){
-    ItemCell& CellToClear = this->Inventory.at(UICellToClear);
-    CellToClear.IPItemInCell->removeFromParentAndCleanup(true);
-    CellToClear.IPItemInCell= nullptr;
-    CellToClear.LItemCount->setString("");
-    CellToClear.IItemCount=0;
-    CellToClear.ICellCost=0;
+    this->Inventory.at(UICellToClear).IPItemInCell->removeFromParentAndCleanup(true);
+    this->Inventory.at(UICellToClear) = ItemCell();
+//    CellToClear.IPItemInCell= nullptr;
+//    CellToClear.LItemCount->setString("");
+//    CellToClear.IItemCount=0;
+//    CellToClear.ICellCost=0;
 }
 
 void InventoryContainer::sortInventory(ESortType ESortTypeInput){
+    bool BUnsorted = true;
     if(ESortTypeInput==ESortType::PRICE){
-        bool BUnsorted = true;
         do{
             BUnsorted = false;
             int ICellNum = 0;
-            for(ItemCell* CellIterator= this->Inventory.begin();CellIterator!=this->Inventory.end()-1;CellIterator++){
+            for(auto CellIterator= this->Inventory.begin();CellIterator!=this->Inventory.end()-1;CellIterator++){
                 if((*CellIterator).ICellCost<(*(CellIterator+1)).ICellCost || (*CellIterator).IPItemInCell!= nullptr && bIsItemsEqual((*CellIterator).IPItemInCell,(*(CellIterator+1)).IPItemInCell)){
                     BUnsorted=true;
                     this->swapCells(ICellNum,ICellNum+1);
@@ -216,14 +205,29 @@ void InventoryContainer::sortInventory(ESortType ESortTypeInput){
                 ++ICellNum;
             }
         }while(BUnsorted);
-    }else{
-
+    }else if(ESortTypeInput == ESortType::TYPE){
+		do {
+			BUnsorted = false;
+			int ICellNum = 0;
+			for (auto CellIterator = this->Inventory.begin(); CellIterator != this->Inventory.end() - 1; CellIterator++) {
+				int ILeftCellSum = this->bIsCellEmpty((*CellIterator).ICellNumber) ? 0:(static_cast<int>((*CellIterator).IPItemInCell->EItemType) + ((*CellIterator).IPItemInCell->IQuestID > 0 ? 1 : 0));
+				int IRightCellSum = this->bIsCellEmpty((*(CellIterator+1)).ICellNumber) ? 0 : (static_cast<int>((*(CellIterator + 1)).IPItemInCell->EItemType) + ((*(CellIterator + 1)).IPItemInCell->IQuestID > 0 ? 1 : 0));
+                Item* ItPLeftItem =  (*CellIterator).IPItemInCell;
+                Item* ItPRightItem =  (*(CellIterator+1)).IPItemInCell;
+				if ((ILeftCellSum < IRightCellSum)||(ILeftCellSum == IRightCellSum && ILeftCellSum>0 && this->bIsItemsEqual(ItPLeftItem,ItPRightItem)))
+				{
+					BUnsorted = true;
+					this->swapCells(ICellNum, ICellNum + 1);
+				}
+				++ICellNum;
+			}
+		} while (BUnsorted);
     }
 }
 
 bool InventoryContainer::bIsItemsEqual(Item *Left, Item *Right) {
     if(Left != nullptr && Right != nullptr){
-        return Left->EItemType == Right->EItemType && Left->FItemCost == Right->FItemCost && Left->BIsStackable == Right->BIsStackable && Left->IQuestID == Right->IQuestID;
+        return Left->EItemType == Right->EItemType && Left->IItemID == Right->IItemID && Left->BIsStackable == Right->BIsStackable && Left->IQuestID == Right->IQuestID;
     }
     return false;
 }
@@ -241,7 +245,7 @@ bool InventoryContainer::bCanBeAdded(Item* InputItem){
         unsigned int UICounter=0;
         for(auto&& Cell : this->Inventory){
             if(!this->bIsCellEmpty(UICounter)){
-                if(this->bIsItemsEqual(InputItem,Cell.IPItemInCell) && !InputItem->BIsStackable){
+                if(this->bIsItemsEqual(InputItem,Cell.IPItemInCell) && !InputItem->BIsStackable && InputItem->IQuestID>0){
                     return false;
                 }
             }
