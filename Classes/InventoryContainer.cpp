@@ -2,19 +2,13 @@
 // Created by rusbaron on 10/5/16.
 //
 #include <Items/Consumable.h>
+#include <Items/Trash.h>
 #include "InventoryContainer.h"
 #include "InventoryScene.h"
 
 
 InventoryContainer::InventoryContainer() {
     unsigned int UICounter = 0;
-    /*for(auto&& Cell : this->Inventory){
-        float FCellWidth = Cell.SCellBg->getContentSize().width;
-        Cell.setPosition((UICounter%_CELL_IN_ROW)*FCellWidth,static_cast<int>(UICounter/_CELL_IN_ROW)*FCellWidth);
-        addChild(&Cell);
-        Cell.ICellNumber=UICounter;
-        ++UICounter;
-    }*/
     for(auto&& Cell : this->Inventory){
         float FCellWidth = Cell.SCellBg->getContentSize().width;
         Cell.setPosition((UICounter%_CELL_IN_ROW)*FCellWidth,static_cast<int>(UICounter/_CELL_IN_ROW)*FCellWidth);
@@ -154,21 +148,27 @@ void InventoryContainer::addItems(Item* InputItem,unsigned int UICellClicked,uns
             InputItem= nullptr;
             this->updateCellCounter(UICellClicked);
         }else{
-            ///Move item near inventory
-            int IFirstCellInRow = CellToUpdate.ICellNumber - CellToUpdate.ICellNumber%_CELL_IN_ROW;
-            InputItem->setPosition(
-                    this->convertToWorldSpace(
-                            cocos2d::Vec2(
-                                    this->Inventory.at(IFirstCellInRow).getPositionX()-this->Inventory.at(IFirstCellInRow).SCellBg->getContentSize().width,
-                                    this->Inventory.at(IFirstCellInRow).getPositionY()
-                            )
-                    )
-            );
+			this->putItemNearInventory(CellToUpdate.ICellNumber, InputItem);
             this->showMessage(std::string("Quest item already exist in inventory!"));
         }
 
     }
 }
+
+void InventoryContainer::putItemNearInventory(int CellFrom, Item* ItemToPut) {
+	if (ItemToPut != nullptr) {
+		int IFirstCellInRow = CellFrom - CellFrom%_CELL_IN_ROW;
+		ItemToPut->setPosition(
+			this->convertToWorldSpace(
+				cocos2d::Vec2(
+					this->Inventory.at(IFirstCellInRow).getPositionX() - this->Inventory.at(IFirstCellInRow).SCellBg->getContentSize().width,
+					this->Inventory.at(IFirstCellInRow).getPositionY()
+				)
+			)
+		);
+	}
+}
+
 void InventoryContainer::swapCells(unsigned int UICellFrom,unsigned int UICellTo){
     ItemCell& CellFrom = this->Inventory.at(UICellFrom);
     ItemCell& CellTo = this->Inventory.at(UICellTo);
@@ -183,12 +183,31 @@ void InventoryContainer::swapCells(unsigned int UICellFrom,unsigned int UICellTo
 }
 
 void InventoryContainer::clearCell(unsigned int UICellToClear){
-    this->Inventory.at(UICellToClear).IPItemInCell->removeFromParentAndCleanup(true);
-    this->Inventory.at(UICellToClear) = ItemCell();
-//    CellToClear.IPItemInCell= nullptr;
-//    CellToClear.LItemCount->setString("");
-//    CellToClear.IItemCount=0;
-//    CellToClear.ICellCost=0;
+	ItemCell& CellToClear = this->Inventory.at(UICellToClear);
+	this->putItemNearInventory(UICellToClear, this->Inventory.at(UICellToClear).IPItemInCell);
+	Item* ItemRecreated;
+	for (int ItemInCell = 1; ItemInCell < CellToClear.IItemCount; ItemInCell++) {
+		switch (CellToClear.IPItemInCell->EItemType) {
+			case (ItemType::ConsumableType):
+				ItemRecreated = new Consumable(*(static_cast<Consumable*>(CellToClear.IPItemInCell)));
+				this->putItemNearInventory(UICellToClear, ItemRecreated);
+				this->getParent()->addChild(ItemRecreated);
+				break;
+			case (ItemType::EquipmentType):
+				ItemRecreated = new Equipment(*(static_cast<Equipment*>(CellToClear.IPItemInCell)));
+				this->putItemNearInventory(UICellToClear, ItemRecreated);
+				this->getParent()->addChild(ItemRecreated);
+				break;
+			case (ItemType::TrashType):
+				ItemRecreated = new Trash(*(static_cast<Trash*>(CellToClear.IPItemInCell)));
+				this->putItemNearInventory(UICellToClear, ItemRecreated);
+				this->getParent()->addChild(ItemRecreated);
+				break;
+			default:
+				break;
+		}
+	}
+	CellToClear = ItemCell();
 }
 
 void InventoryContainer::sortInventory(ESortType ESortTypeInput){

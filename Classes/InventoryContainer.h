@@ -68,6 +68,10 @@ public:
      * Show error or information messages for user
      */
     void showMessage(std::string messageText);
+	/*
+	 *
+	 */
+	void putItemNearInventory(int CellFrom,Item* ItemToPut);
 };
 
 

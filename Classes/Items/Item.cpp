@@ -35,8 +35,9 @@ Item::Item(const Item& ItemInput){
     this->BIsStackable=ItemInput.BIsStackable;
 
     this->IQuestID=ItemInput.IQuestID;
-
-    this->SPItemSprite= cocos2d::Sprite::createWithSpriteFrameName(ItemInput.SPItemSprite->getName());
+	
+    this->SPItemSprite= cocos2d::Sprite::createWithSpriteFrame(ItemInput.SPItemSprite->getSpriteFrame());
+	
     addChild(this->SPItemSprite);
 
     this->FItemCost = ItemInput.FItemCost;
