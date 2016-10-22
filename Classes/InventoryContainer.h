@@ -28,7 +28,7 @@ public:
 
     void addEvents();
     /*
-     * Number of cell,that was grub by user.
+     * Cell,that was grabbed
      */
     int ICellForSwap;
     /*
@@ -71,7 +71,8 @@ public:
 	/*
 	 *
 	 */
-	void putItemNearInventory(int CellFrom,Item* ItemToPut);
+	void putItemOutsideInventory(int ICellFrom,Item* IPItemToPut,cocos2d::Vec2* V2PPositionToPut=nullptr);
+	void moveItemFomCell(unsigned int UICellToClear,cocos2d::EventMouse* EInput=nullptr);
 };
 
 

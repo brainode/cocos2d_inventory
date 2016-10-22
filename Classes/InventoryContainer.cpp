@@ -28,6 +28,9 @@ InventoryContainer::InventoryContainer() {
     );
     addChild(this->LInventoryMessage,50);
 
+	/*
+	 * Sorting buttons
+	 */
     cocos2d::ui::Button* ButPriceSortButton = cocos2d::ui::Button::create("menubutton.png","menubutton_pressed.png");
     ButPriceSortButton->setTitleText("Sort by Price");
     ButPriceSortButton->setTitleColor(cocos2d::Color3B::BLACK); //WTF?Doesn't work
@@ -53,7 +56,7 @@ InventoryContainer::InventoryContainer() {
 		this->sortInventory(ESortType::TYPE);
 	});
     addChild(ButTypeSortButton);
-
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     this->setName("ItemContainer");
 
     this->addEvents();
@@ -114,14 +117,7 @@ void InventoryContainer::addEvents() {
         else if(IItemCellUnderMouse<0 && this->ICellForSwap>=0 && this->Inventory.at(ICellForSwap).IPItemInCell!= nullptr){
             ///Check that item not quest.
             if(this->Inventory.at(ICellForSwap).IPItemInCell->IQuestID<0){
-                cocos2d::Vec2 V2MouseLocation = EM->getLocation();
-                ///Converting mouse location to global world location(Y)
-                V2MouseLocation.y=cocos2d::Director::getInstance()->getWinSize().height-V2MouseLocation.y;
-                ItemCell& CellToClear = this->Inventory.at(ICellForSwap);
-                for(int IIter = 0;IIter<CellToClear.IItemCount;IIter++){
-                    //Create copies of object,put them at mouse position
-                }
-                this->clearCell(ICellForSwap);
+                this->moveItemFomCell(ICellForSwap,EM);
             }else{
                 InventoryScene::IPMovedItem->setPosition(this->convertToWorldSpace(this->Inventory.at(ICellForSwap).getPosition()));
                 this->showMessage(std::string("Quest item can't be removed!"));
@@ -137,35 +133,49 @@ void InventoryContainer::addItems(Item* InputItem,unsigned int UICellClicked,uns
     if(InputItem!= nullptr){
         ItemCell& CellToUpdate = this->Inventory.at(UICellClicked);
         if(this->bCanBeAdded(InputItem)){
-            CellToUpdate.IItemCount += UIItemCount;
-            CellToUpdate.ICellCost += InputItem->FItemCost*UIItemCount;
             if(CellToUpdate.IPItemInCell!= nullptr && CellToUpdate.IPItemInCell->BIsStackable && InputItem->BIsStackable && this->bIsItemsEqual(InputItem,CellToUpdate.IPItemInCell)){
+				CellToUpdate.IItemCount += UIItemCount;
+				CellToUpdate.ICellCost += InputItem->FItemCost*UIItemCount;
                 InputItem->removeFromParentAndCleanup(true);
             }else if(CellToUpdate.IPItemInCell == nullptr){
+				CellToUpdate.IItemCount += UIItemCount;
+				CellToUpdate.ICellCost += InputItem->FItemCost*UIItemCount;
                 CellToUpdate.IPItemInCell=InputItem;
                 CellToUpdate.IPItemInCell->setPosition(this->convertToWorldSpace(CellToUpdate.getPosition()));
+            }else
+            {
+				this->putItemOutsideInventory(CellToUpdate.ICellNumber, CellToUpdate.IPItemInCell);
+				CellToUpdate.IItemCount = UIItemCount;
+				CellToUpdate.ICellCost = InputItem->FItemCost*UIItemCount;
+				CellToUpdate.IPItemInCell = InputItem;
+				CellToUpdate.IPItemInCell->setPosition(this->convertToWorldSpace(CellToUpdate.getPosition()));
             }
             InputItem= nullptr;
             this->updateCellCounter(UICellClicked);
         }else{
-			this->putItemNearInventory(CellToUpdate.ICellNumber, InputItem);
+			this->putItemOutsideInventory(CellToUpdate.ICellNumber, InputItem);
             this->showMessage(std::string("Quest item already exist in inventory!"));
         }
-
     }
 }
 
-void InventoryContainer::putItemNearInventory(int CellFrom, Item* ItemToPut) {
-	if (ItemToPut != nullptr) {
-		int IFirstCellInRow = CellFrom - CellFrom%_CELL_IN_ROW;
-		ItemToPut->setPosition(
-			this->convertToWorldSpace(
-				cocos2d::Vec2(
-					this->Inventory.at(IFirstCellInRow).getPositionX() - this->Inventory.at(IFirstCellInRow).SCellBg->getContentSize().width,
-					this->Inventory.at(IFirstCellInRow).getPositionY()
+void InventoryContainer::putItemOutsideInventory(int ICellFrom, Item* IPItemToPut, cocos2d::Vec2* V2PPositionToPut) {
+	if (IPItemToPut != nullptr) {
+		if(V2PPositionToPut==nullptr)
+		{
+			int IFirstCellInRow = ICellFrom - ICellFrom%_CELL_IN_ROW;
+			IPItemToPut->setPosition(
+				this->convertToWorldSpace(
+					cocos2d::Vec2(
+						this->Inventory.at(IFirstCellInRow).getPositionX() - this->Inventory.at(IFirstCellInRow).SCellBg->getContentSize().width,
+						this->Inventory.at(IFirstCellInRow).getPositionY()
+					)
 				)
-			)
-		);
+			);
+		}else
+		{
+			IPItemToPut->setPosition(*V2PPositionToPut);
+		}
 	}
 }
 
@@ -182,32 +192,71 @@ void InventoryContainer::swapCells(unsigned int UICellFrom,unsigned int UICellTo
     }
 }
 
-void InventoryContainer::clearCell(unsigned int UICellToClear){
+void InventoryContainer::moveItemFomCell(unsigned int UICellToClear,cocos2d::EventMouse* EInput){
 	ItemCell& CellToClear = this->Inventory.at(UICellToClear);
-	this->putItemNearInventory(UICellToClear, this->Inventory.at(UICellToClear).IPItemInCell);
+	cocos2d::Vec2 V2MouseLocation;
+	if (EInput == nullptr)
+	{
+		this->putItemOutsideInventory(UICellToClear, this->Inventory.at(UICellToClear).IPItemInCell);
+	}else
+	{
+		V2MouseLocation = EInput->getLocation();
+		///Converting mouse location to global world location(Y)
+		V2MouseLocation.y = cocos2d::Director::getInstance()->getWinSize().height - V2MouseLocation.y;
+	}
 	Item* ItemRecreated;
 	for (int ItemInCell = 1; ItemInCell < CellToClear.IItemCount; ItemInCell++) {
 		switch (CellToClear.IPItemInCell->EItemType) {
 			case (ItemType::ConsumableType):
 				ItemRecreated = new Consumable(*(static_cast<Consumable*>(CellToClear.IPItemInCell)));
-				this->putItemNearInventory(UICellToClear, ItemRecreated);
+				if (EInput == nullptr)
+				{
+					this->putItemOutsideInventory(UICellToClear, ItemRecreated);
+				}else
+				{
+					this->putItemOutsideInventory(UICellToClear, ItemRecreated,&V2MouseLocation);
+				}
 				this->getParent()->addChild(ItemRecreated);
 				break;
 			case (ItemType::EquipmentType):
 				ItemRecreated = new Equipment(*(static_cast<Equipment*>(CellToClear.IPItemInCell)));
-				this->putItemNearInventory(UICellToClear, ItemRecreated);
+				if (EInput == nullptr)
+				{
+					this->putItemOutsideInventory(UICellToClear, ItemRecreated);
+				}
+				else
+				{
+					this->putItemOutsideInventory(UICellToClear, ItemRecreated, &V2MouseLocation);
+				}
 				this->getParent()->addChild(ItemRecreated);
 				break;
 			case (ItemType::TrashType):
 				ItemRecreated = new Trash(*(static_cast<Trash*>(CellToClear.IPItemInCell)));
-				this->putItemNearInventory(UICellToClear, ItemRecreated);
+				if (EInput == nullptr)
+				{
+					this->putItemOutsideInventory(UICellToClear, ItemRecreated);
+				}
+				else
+				{
+					this->putItemOutsideInventory(UICellToClear, ItemRecreated, &V2MouseLocation);
+				}
 				this->getParent()->addChild(ItemRecreated);
 				break;
 			default:
 				break;
 		}
 	}
-	CellToClear = ItemCell();
+	this->clearCell(UICellToClear);
+}
+
+void moveItemFomCell(unsigned int UICellToClear, cocos2d::EventMouse* EInput)
+{
+	
+}
+
+void InventoryContainer::clearCell(unsigned int UICellToClear)
+{
+	this->Inventory.at(UICellToClear) = ItemCell();
 }
 
 void InventoryContainer::sortInventory(ESortType ESortTypeInput){
