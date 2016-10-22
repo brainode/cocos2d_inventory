@@ -45,6 +45,7 @@ bool InventoryScene::init()
     }
 
     Cursor = cocos2d::Sprite::createWithSpriteFrameName("cursor");
+    Cursor->setAnchorPoint(cocos2d::Vec2(0 , 1));
     addChild(Cursor,1000);
 
 
@@ -88,7 +89,7 @@ bool InventoryScene::init()
     Sword->setPosition(getContentSize().width/2-150,getContentSize().height/2);
     addChild(Sword);
 
-    Item* Torch = new Equipment(1,false,cocos2d::Sprite::createWithSpriteFrameName("torch"),80,0);
+    Item* Torch = new Equipment(1,false,cocos2d::Sprite::createWithSpriteFrameName("torch"),80,0,0);
     Torch->setPosition(getContentSize().width/2-250,getContentSize().height/2);
     addChild(Torch);
 

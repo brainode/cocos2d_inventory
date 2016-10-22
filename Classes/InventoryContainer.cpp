@@ -89,12 +89,10 @@ void InventoryContainer::addEvents() {
         this->ICellForSwap = this->iCellIsHit(EM);
         if(this->ICellForSwap>=0){
             if(EM->getMouseButton()==MOUSE_BUTTON_LEFT && InventoryScene::IPMovedItem==nullptr && !this->bIsCellEmpty(this->ICellForSwap)){
-                //cocos2d::log("Left button on cell:%i",this->ICellForSwap);
                 InventoryScene::IPMovedItem = this->Inventory.at(ICellForSwap).IPItemInCell;
                 InventoryScene::IPMovedItem->BIsGrabByUser = true;
-                cocos2d::log("Cell #%i has cost:%f and count:%i",this->ICellForSwap,this->Inventory.at(this->ICellForSwap).ICellCost,this->Inventory.at(this->ICellForSwap).IItemCount);
+                cocos2d::log("Item from Cell:%i was grabbed with quantity %i",ICellForSwap, this->Inventory.at(ICellForSwap).IItemCount);
             }else if(EM->getMouseButton() == MOUSE_BUTTON_RIGHT){
-                cocos2d::log("Right button on cell:%i",this->ICellForSwap);
             }
 
         }
@@ -103,24 +101,27 @@ void InventoryContainer::addEvents() {
         cocos2d::EventMouse* EM = (cocos2d::EventMouse*)event;
         int IItemCellUnderMouse = this->iCellIsHit(EM);
         bool BIsEmptyCellFrom = this->bIsCellEmpty(this->ICellForSwap);
-        bool BIsEmptyCellTo = this->bIsCellEmpty(IItemCellUnderMouse);
-        ///Check if Cell was grabbed
-        if(this->ICellForSwap != IItemCellUnderMouse && !BIsEmptyCellFrom && IItemCellUnderMouse>=0 && EM->getMouseButton()==MOUSE_BUTTON_LEFT){
-            this->swapCells(ICellForSwap,IItemCellUnderMouse);
-        }///Else check if any item was grabbed
-        else if(InventoryScene::IPMovedItem!= nullptr && this->ICellForSwap != IItemCellUnderMouse && this->ICellForSwap<0 && IItemCellUnderMouse>=0 && EM->getMouseButton()==MOUSE_BUTTON_LEFT){
-            this->addItems(InventoryScene::IPMovedItem,IItemCellUnderMouse);
-        }///Cause when just moving item around this cell
-        else if(this->ICellForSwap == IItemCellUnderMouse && !BIsEmptyCellFrom){
-            InventoryScene::IPMovedItem->setPosition(this->convertToWorldSpace(this->Inventory.at(IItemCellUnderMouse).getPosition()));
-        }///Case when item moved out from inventory.
-        else if(IItemCellUnderMouse<0 && this->ICellForSwap>=0 && this->Inventory.at(ICellForSwap).IPItemInCell!= nullptr){
-            ///Check that item not quest.
-            if(this->Inventory.at(ICellForSwap).IPItemInCell->IQuestID<0){
-                this->moveItemFomCell(ICellForSwap,EM);
-            }else{
-                InventoryScene::IPMovedItem->setPosition(this->convertToWorldSpace(this->Inventory.at(ICellForSwap).getPosition()));
-                this->showMessage(std::string("Quest item can't be removed!"));
+        if(EM->getMouseButton() == MOUSE_BUTTON_LEFT)
+        {
+            ///Check if Cell was grabbed
+            if (this->ICellForSwap != IItemCellUnderMouse && !BIsEmptyCellFrom && IItemCellUnderMouse >= 0) {
+                this->swapCells(ICellForSwap, IItemCellUnderMouse);
+            }///Else check if any item was grabbed
+            else if (InventoryScene::IPMovedItem != nullptr && this->ICellForSwap != IItemCellUnderMouse && this->ICellForSwap<0 && IItemCellUnderMouse >= 0) {
+                this->addItems(InventoryScene::IPMovedItem, IItemCellUnderMouse);
+            }///Cause when just moving item around this cell
+            else if (this->ICellForSwap == IItemCellUnderMouse && !BIsEmptyCellFrom) {
+                InventoryScene::IPMovedItem->setPosition(this->convertToWorldSpace(this->Inventory.at(IItemCellUnderMouse).getPosition()));
+            }///Case when item moved out from inventory.
+            else if (IItemCellUnderMouse<0 && this->ICellForSwap >= 0 && this->Inventory.at(ICellForSwap).IPItemInCell != nullptr) {
+                ///Check that item not quest.
+                if (this->Inventory.at(ICellForSwap).IPItemInCell->IQuestID<0) {
+                    this->putItemOutsideInventory(ICellForSwap, EM);
+                }
+                else {
+                    InventoryScene::IPMovedItem->setPosition(this->convertToWorldSpace(this->Inventory.at(ICellForSwap).getPosition()));
+                    this->showMessage(std::string("Quest item can't be removed!"));
+                }
             }
         }
         InventoryScene::IPMovedItem = nullptr;
@@ -130,54 +131,97 @@ void InventoryContainer::addEvents() {
 }
 
 void InventoryContainer::addItems(Item* InputItem,unsigned int UICellClicked,unsigned int UIItemCount){
-    if(InputItem!= nullptr){
-        ItemCell& CellToUpdate = this->Inventory.at(UICellClicked);
-        if(this->bCanBeAdded(InputItem)){
-            if(CellToUpdate.IPItemInCell!= nullptr && CellToUpdate.IPItemInCell->BIsStackable && InputItem->BIsStackable && this->bIsItemsEqual(InputItem,CellToUpdate.IPItemInCell)){
-				CellToUpdate.IItemCount += UIItemCount;
-				CellToUpdate.ICellCost += InputItem->FItemCost*UIItemCount;
-                InputItem->removeFromParentAndCleanup(true);
-            }else if(CellToUpdate.IPItemInCell == nullptr){
-				CellToUpdate.IItemCount += UIItemCount;
-				CellToUpdate.ICellCost += InputItem->FItemCost*UIItemCount;
-                CellToUpdate.IPItemInCell=InputItem;
-                CellToUpdate.IPItemInCell->setPosition(this->convertToWorldSpace(CellToUpdate.getPosition()));
+    ItemCell& CellToUpdate = this->Inventory.at(UICellClicked);
+    if(this->bCanBeAdded(InputItem)){
+        if(CellToUpdate.IPItemInCell!= nullptr && CellToUpdate.IPItemInCell->BIsStackable && InputItem->BIsStackable && this->bIsItemsEqual(InputItem,CellToUpdate.IPItemInCell)){
+            ///Stack items
+			CellToUpdate.IItemCount += UIItemCount;
+			CellToUpdate.ICellCost += InputItem->FItemCost*UIItemCount;
+            InputItem->removeFromParentAndCleanup(true);
+        }else if(CellToUpdate.IPItemInCell == nullptr){
+            ///add items to empty cell
+			CellToUpdate.IItemCount += UIItemCount;
+			CellToUpdate.ICellCost += InputItem->FItemCost*UIItemCount;
+            CellToUpdate.IPItemInCell=InputItem;
+            CellToUpdate.IPItemInCell->setPosition(this->convertToWorldSpace(CellToUpdate.getPosition()));
+        }else{
+            ///Replace item
+            if(this->Inventory.at(UICellClicked).IPItemInCell->IQuestID>=0)
+            {
+                this->putItemOutsideInventory(InputItem, UICellClicked);
+                this->showMessage(std::string("Quest item can't be removed from inventory!"));
             }else
             {
-				this->putItemOutsideInventory(CellToUpdate.ICellNumber, CellToUpdate.IPItemInCell);
-				CellToUpdate.IItemCount = UIItemCount;
-				CellToUpdate.ICellCost = InputItem->FItemCost*UIItemCount;
-				CellToUpdate.IPItemInCell = InputItem;
-				CellToUpdate.IPItemInCell->setPosition(this->convertToWorldSpace(CellToUpdate.getPosition()));
+                this->putItemOutsideInventory(CellToUpdate.ICellNumber);
+                CellToUpdate.IItemCount = UIItemCount;
+                CellToUpdate.ICellCost = InputItem->FItemCost*UIItemCount;
+                CellToUpdate.IPItemInCell = InputItem;
+                CellToUpdate.IPItemInCell->setPosition(this->convertToWorldSpace(CellToUpdate.getPosition()));
             }
-            InputItem= nullptr;
-            this->updateCellCounter(UICellClicked);
-        }else{
-			this->putItemOutsideInventory(CellToUpdate.ICellNumber, InputItem);
-            this->showMessage(std::string("Quest item already exist in inventory!"));
         }
+        InputItem= nullptr;
+        this->updateCellCounter(UICellClicked);
+    }else{
+		this->putItemOutsideInventory(InputItem,CellToUpdate.ICellNumber);
+        this->showMessage(std::string("Quest item already exist in inventory!"));
     }
 }
 
-void InventoryContainer::putItemOutsideInventory(int ICellFrom, Item* IPItemToPut, cocos2d::Vec2* V2PPositionToPut) {
-	if (IPItemToPut != nullptr) {
-		if(V2PPositionToPut==nullptr)
-		{
-			int IFirstCellInRow = ICellFrom - ICellFrom%_CELL_IN_ROW;
-			IPItemToPut->setPosition(
-				this->convertToWorldSpace(
-					cocos2d::Vec2(
-						this->Inventory.at(IFirstCellInRow).getPositionX() - this->Inventory.at(IFirstCellInRow).SCellBg->getContentSize().width,
-						this->Inventory.at(IFirstCellInRow).getPositionY()
-					)
-				)
-			);
-		}else
-		{
-			IPItemToPut->setPosition(*V2PPositionToPut);
-		}
-	}
+void InventoryContainer::putItemOutsideInventory(Item* IPInputItem, int ICellTo)
+{
+    int IFirstCellInRow = ICellTo - ICellTo%_CELL_IN_ROW;
+    cocos2d::Vec2 V2PostitionToPlace = this->convertToWorldSpace(
+        cocos2d::Vec2(
+            this->Inventory.at(IFirstCellInRow).getPositionX() - this->Inventory.at(IFirstCellInRow).SCellBg->getContentSize().width,
+            this->Inventory.at(IFirstCellInRow).getPositionY()
+        )
+    );
+    IPInputItem->setPosition(V2PostitionToPlace);
 }
+
+void InventoryContainer::putItemOutsideInventory(int ICellFrom,cocos2d::EventMouse* EInput) {
+    if(!this->bIsCellEmpty(ICellFrom))
+    {
+        Item* IPItemToPut = this->Inventory.at(ICellFrom).IPItemInCell;
+        int IItemCount = this->Inventory.at(ICellFrom).IItemCount;
+        cocos2d::Vec2 V2PostitionToPlace;
+        if (EInput == nullptr)
+        {
+            int IFirstCellInRow = ICellFrom - ICellFrom%_CELL_IN_ROW;
+            V2PostitionToPlace = this->convertToWorldSpace(
+                cocos2d::Vec2(
+                    this->Inventory.at(IFirstCellInRow).getPositionX() - this->Inventory.at(IFirstCellInRow).SCellBg->getContentSize().width,
+                    this->Inventory.at(IFirstCellInRow).getPositionY()
+                )
+            );
+        }
+        else {
+            V2PostitionToPlace = cocos2d::Vec2(EInput->getCursorX(),EInput->getCursorY());
+        }
+        IPItemToPut->setPosition(V2PostitionToPlace);
+        for (int Iterator = 1;Iterator<IItemCount;Iterator++)
+        {
+            switch (IPItemToPut->EItemType)
+            {
+            case (ItemType::EquipmentType):
+                IPItemToPut = new Equipment(*static_cast<Equipment*>(IPItemToPut));
+                break;
+            case (ItemType::ConsumableType):
+                IPItemToPut = new Consumable(*static_cast<Consumable*>(IPItemToPut));
+                break;
+            case (ItemType::TrashType):
+                IPItemToPut = new Trash(*static_cast<Trash*>(IPItemToPut));
+                break;
+            default:
+                break;
+            }
+            this->getParent()->addChild(IPItemToPut);
+            IPItemToPut->setPosition(V2PostitionToPlace);
+        }
+        this->clearCell(ICellFrom);
+    }       
+}
+
 
 void InventoryContainer::swapCells(unsigned int UICellFrom,unsigned int UICellTo){
     ItemCell& CellFrom = this->Inventory.at(UICellFrom);
@@ -192,75 +236,37 @@ void InventoryContainer::swapCells(unsigned int UICellFrom,unsigned int UICellTo
     }
 }
 
-void InventoryContainer::moveItemFomCell(unsigned int UICellToClear,cocos2d::EventMouse* EInput){
-	ItemCell& CellToClear = this->Inventory.at(UICellToClear);
-	cocos2d::Vec2 V2MouseLocation;
-	if (EInput == nullptr)
-	{
-		this->putItemOutsideInventory(UICellToClear, this->Inventory.at(UICellToClear).IPItemInCell);
-	}else
-	{
-		V2MouseLocation = EInput->getLocation();
-		///Converting mouse location to global world location(Y)
-		V2MouseLocation.y = cocos2d::Director::getInstance()->getWinSize().height - V2MouseLocation.y;
-	}
-	Item* ItemRecreated;
-	for (int ItemInCell = 1; ItemInCell < CellToClear.IItemCount; ItemInCell++) {
-		switch (CellToClear.IPItemInCell->EItemType) {
-			case (ItemType::ConsumableType):
-				ItemRecreated = new Consumable(*(static_cast<Consumable*>(CellToClear.IPItemInCell)));
-				if (EInput == nullptr)
-				{
-					this->putItemOutsideInventory(UICellToClear, ItemRecreated);
-				}else
-				{
-					this->putItemOutsideInventory(UICellToClear, ItemRecreated,&V2MouseLocation);
-				}
-				this->getParent()->addChild(ItemRecreated);
-				break;
-			case (ItemType::EquipmentType):
-				ItemRecreated = new Equipment(*(static_cast<Equipment*>(CellToClear.IPItemInCell)));
-				if (EInput == nullptr)
-				{
-					this->putItemOutsideInventory(UICellToClear, ItemRecreated);
-				}
-				else
-				{
-					this->putItemOutsideInventory(UICellToClear, ItemRecreated, &V2MouseLocation);
-				}
-				this->getParent()->addChild(ItemRecreated);
-				break;
-			case (ItemType::TrashType):
-				ItemRecreated = new Trash(*(static_cast<Trash*>(CellToClear.IPItemInCell)));
-				if (EInput == nullptr)
-				{
-					this->putItemOutsideInventory(UICellToClear, ItemRecreated);
-				}
-				else
-				{
-					this->putItemOutsideInventory(UICellToClear, ItemRecreated, &V2MouseLocation);
-				}
-				this->getParent()->addChild(ItemRecreated);
-				break;
-			default:
-				break;
-		}
-	}
-	this->clearCell(UICellToClear);
-}
-
-void moveItemFomCell(unsigned int UICellToClear, cocos2d::EventMouse* EInput)
-{
-	
-}
-
 void InventoryContainer::clearCell(unsigned int UICellToClear)
 {
 	this->Inventory.at(UICellToClear) = ItemCell();
 }
 
+void InventoryContainer::groupAllStackableItems()
+{
+    for(int ICellIterator = 0;ICellIterator<_INVENTORY_SIZE;++ICellIterator)
+    {
+        if(!this->bIsCellEmpty(ICellIterator))
+        {
+            Item* ItemToStack = this->Inventory.at(ICellIterator).IPItemInCell;
+            for(int ICellIteratorToStack = ICellIterator+1;ICellIteratorToStack<_INVENTORY_SIZE;++ICellIteratorToStack)
+            {
+                if(!this->bIsCellEmpty(ICellIteratorToStack))
+                {
+                    if(this->bIsItemsEqual(ItemToStack,this->Inventory.at(ICellIteratorToStack).IPItemInCell))
+                    {
+                        this->addItems(this->Inventory.at(ICellIteratorToStack).IPItemInCell, ICellIterator, this->Inventory.at(ICellIteratorToStack).IItemCount);
+                        this->clearCell(ICellIteratorToStack);
+                    }
+                }
+            }
+        }
+    }
+}
+
+
 void InventoryContainer::sortInventory(ESortType ESortTypeInput){
     bool BUnsorted = true;
+    this->groupAllStackableItems();
     if(ESortTypeInput==ESortType::PRICE){
         do{
             BUnsorted = false;

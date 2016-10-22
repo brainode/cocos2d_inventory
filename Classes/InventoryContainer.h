@@ -40,7 +40,14 @@ public:
      */
     cocos2d::Label* LInventoryMessage;
 
+	/*
+	 *
+	 */
     void addItems(Item* InputItem,unsigned int UICellClicked,unsigned int UIItemCount=1);
+
+	/*
+	 *
+	 */
     void swapCells(unsigned int UICellFrom,unsigned int UICellTo);
     /*
      * Return true if items has equal type,price
@@ -65,14 +72,21 @@ public:
      */
     void sortInventory(ESortType ESortTypeInput);
     /*
+     * Group all stackable items
+     */
+    void groupAllStackableItems();
+    /*
      * Show error or information messages for user
      */
     void showMessage(std::string messageText);
 	/*
-	 *
+	 * Action executes at replacing item,or if item moved out from inventory
 	 */
-	void putItemOutsideInventory(int ICellFrom,Item* IPItemToPut,cocos2d::Vec2* V2PPositionToPut=nullptr);
-	void moveItemFomCell(unsigned int UICellToClear,cocos2d::EventMouse* EInput=nullptr);
+	void putItemOutsideInventory(int ICellFrom, cocos2d::EventMouse* EInput=nullptr);
+    /*
+     * Action executes when trying to add quest item
+     */
+    void putItemOutsideInventory(Item* IPInputItem, int ICellTo);
 };
 
 
