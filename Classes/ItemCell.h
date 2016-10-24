@@ -1,6 +1,7 @@
 //
 // Created by rusbaron on 10/8/16.
 //
+#define _DEBUG 1
 
 #ifndef MYGAME_ITEMCELL_H
 #define MYGAME_ITEMCELL_H
@@ -36,6 +37,10 @@ public:
 	void updateLabels();
 
     ~ItemCell();
+
+#if _DEBUG==1
+	void showClickedCell();
+#endif // DEBUG
 
 };
 

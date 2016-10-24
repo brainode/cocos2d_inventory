@@ -76,6 +76,9 @@ int InventoryContainer::iCellIsHit(cocos2d::EventMouse *EInput) {
         ///Convert Rect to world space
         cocos2d::Rect RNodeWorldPosition = cocos2d::Rect(V2LeftBottomWorldPoint.x,V2LeftBottomWorldPoint.y,ItemCell.SCellBg->getContentSize().width,ItemCell.SCellBg->getContentSize().height);
         if(RNodeWorldPosition.containsPoint(V2MouseLocation)){
+#if _DEBUG==1
+			ItemCell.showClickedCell();
+#endif // DEBUG
             return ItemCell.ICellNumber;
         }
     }
@@ -123,9 +126,9 @@ void InventoryContainer::addEvents() {
                     this->showMessage(std::string("Quest item can't be removed!"));
                 }
             }
+			InventoryScene::IPMovedItem = nullptr;
+			this->ICellForSwap = -1;
         }
-        InventoryScene::IPMovedItem = nullptr;
-        this->ICellForSwap=-1;
     };
     cocos2d::Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(listener,30);
 }

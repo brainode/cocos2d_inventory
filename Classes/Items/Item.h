@@ -18,7 +18,9 @@ public:
 	int IItemID;
 
     cocos2d::Sprite* SPItemSprite;
-
+	///Test var
+	cocos2d::Label* Grubbed;
+	///End of test
     float FItemCost;
 
     Item(int IItemID,bool BIsStackableInput,cocos2d::Sprite* SPItemSpriteInput,float FItemCostInput,int IQuestIDInput);

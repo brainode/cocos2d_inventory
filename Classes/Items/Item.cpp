@@ -17,6 +17,13 @@ Item::Item(int IItemIDInput,bool BIsStackableInput,cocos2d::Sprite* SPItemSprite
     this->SPItemSprite= SPItemSpriteInput;
     addChild(this->SPItemSprite);
 
+	///Test block
+	this->Grubbed = cocos2d::Label::createWithTTF("false", "fonts/Marker Felt.ttf", 24);
+	this->Grubbed->setColor(cocos2d::Color3B::RED);
+	this->Grubbed->setPosition(cocos2d::Vec2(0, -50));
+	addChild(this->Grubbed);
+	///End of Test
+
     this->FItemCost = FItemCostInput;
 
     this->BIsGrabByUser = false;
@@ -39,6 +46,13 @@ Item::Item(const Item& ItemInput){
     this->SPItemSprite= cocos2d::Sprite::createWithSpriteFrame(ItemInput.SPItemSprite->getSpriteFrame());
 	
     addChild(this->SPItemSprite);
+
+	///Test block
+	this->Grubbed = cocos2d::Label::createWithTTF("false", "fonts/Marker Felt.ttf", 24);
+	this->Grubbed->setColor(cocos2d::Color3B::RED);
+	this->Grubbed->setPosition(cocos2d::Vec2(0, -50));
+	addChild(this->Grubbed);
+	///End of Test
 
     this->FItemCost = ItemInput.FItemCost;
 
@@ -78,8 +92,11 @@ void Item::addEvents() {
     listener->onMouseDown = [this](cocos2d::Event* event){
         cocos2d::EventMouse* EM = (cocos2d::EventMouse*)event;
         if(this->BIsHit(EM) && EM->getMouseButton()==MOUSE_BUTTON_LEFT){
-//            cocos2d::log("Item cost: %f", this->FItemCost);
             this->BIsGrabByUser = true;
+			///Test block
+			this->Grubbed->setString("true");
+			this->Grubbed->setColor(cocos2d::Color3B::GREEN);
+			///End of test
             InventoryScene::IPMovedItem = this;
         }
     };
@@ -93,7 +110,14 @@ void Item::addEvents() {
         }
     };
     listener->onMouseUp = [this](cocos2d::Event* event){
-        this->BIsGrabByUser = false;
+		cocos2d::EventMouse* EM = (cocos2d::EventMouse*)event;
+		if (this->BIsGrabByUser && EM->getMouseButton() == MOUSE_BUTTON_LEFT) {
+			///Test block
+			this->Grubbed->setString("false");
+			this->Grubbed->setColor(cocos2d::Color3B::RED);
+			///End of test
+			this->BIsGrabByUser = false;
+		}
     };
 
     cocos2d::Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(listener,30);
