@@ -19,6 +19,11 @@ ItemCell::ItemCell(){
     this->LItemCount->setPosition(this->SCellBg->getContentSize().width/2-FontSize,this->SCellBg->getContentSize().height/2-FontSize);
     addChild(this->LItemCount,50);
 
+	this->LCellCost = cocos2d::Label::createWithTTF("", "fonts/Marker Felt.ttf", FontSize);
+	this->LCellCost->setColor(cocos2d::Color3B::YELLOW);
+	this->LCellCost->setPosition(this->SCellBg->getContentSize().width / 2 - FontSize, -this->SCellBg->getContentSize().height / 2 + FontSize);
+	addChild(this->LCellCost, 50);
+
     this->ICellNumber=0;
 
     this->setName("ItemCell");
@@ -41,6 +46,11 @@ ItemCell::ItemCell(ItemCell& CellToCopy) {
         this->LItemCount->setString(CellToCopy.LItemCount->getString());
         this->LItemCount->setPosition(this->SCellBg->getContentSize().width / 2 - FontSize, this->SCellBg->getContentSize().height / 2 - FontSize);
         addChild(this->LItemCount, 50);
+
+		this->LCellCost = cocos2d::Label::createWithTTF("", "fonts/Marker Felt.ttf", FontSize);
+		this->LCellCost->setString(CellToCopy.LCellCost->getString());
+		this->LCellCost->setPosition(this->SCellBg->getContentSize().width / 2 - FontSize, -this->SCellBg->getContentSize().height / 2 + FontSize);
+		addChild(this->LCellCost, 50);
 
         this->setName("ItemCell");
     }
@@ -76,6 +86,7 @@ ItemCell& ItemCell::operator=(const ItemCell& CellToCopy) {
         this->IItemCount = CellToCopy.IItemCount;
         this->ICellCost = CellToCopy.ICellCost;
         this->LItemCount->setString(CellToCopy.LItemCount->getString());
+		this->LCellCost->setString(CellToCopy.LCellCost->getString());
 
         if(this->IPItemInCell!= nullptr && this->getParent()!= nullptr) {
             this->IPItemInCell->setPosition(this->getParent()->convertToWorldSpace(this->getPosition()));
@@ -89,3 +100,20 @@ ItemCell::~ItemCell(){
     this->removeAllChildrenWithCleanup(true);
 }
 
+void ItemCell::updateLabels() {
+	if (this->IPItemInCell != nullptr) {
+		if (this->IItemCount) {
+			this->LCellCost->setString("$"+std::to_string(this->ICellCost));
+			if (this->IPItemInCell->BIsStackable) {
+				this->LItemCount->setString(std::to_string(this->IItemCount));
+			}
+			else {
+				this->LItemCount->setString("");
+			}
+		}
+		else {
+			this->LItemCount->setString("");
+			this->LCellCost->setString("");
+		}
+	}
+}

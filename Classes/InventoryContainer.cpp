@@ -330,12 +330,7 @@ bool InventoryContainer::bCanBeAdded(Item* InputItem){
 }
 
 void InventoryContainer::updateCellCounter(unsigned int UICellToUpdate){
-    ItemCell& CellToUpdate = this->Inventory.at(UICellToUpdate);
-    if(CellToUpdate.IItemCount>0 && CellToUpdate.IPItemInCell->BIsStackable){
-        CellToUpdate.LItemCount->setString(std::to_string(CellToUpdate.IItemCount));
-    }else{
-        CellToUpdate.LItemCount->setString("");
-    }
+	this->Inventory.at(UICellToUpdate).updateLabels();
 }
 
 void InventoryContainer::showMessage(std::string messageText){

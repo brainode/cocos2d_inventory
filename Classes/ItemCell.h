@@ -11,9 +11,11 @@ class ItemCell : public cocos2d::Node {
 public:
     Item* IPItemInCell;
     int IItemCount;
-    float ICellCost;
+    int ICellCost;
     ///Label,that present ItemCount in cell to player
     cocos2d::Label* LItemCount;
+
+	cocos2d::Label* LCellCost;
 
     cocos2d::Sprite* SCellBg;
 
@@ -22,14 +24,16 @@ public:
     ItemCell();
     /*
      *Copy constructor
-    */
+     */
     ItemCell(ItemCell& CellToCopy);
     /*
-    *Move constructor
-    */
+     *Move constructor
+     */
     ItemCell(ItemCell&& CellToMove);
 
     ItemCell& operator=(const ItemCell& CellToCopy);
+
+	void updateLabels();
 
     ~ItemCell();
 
