@@ -89,15 +89,15 @@ void InventoryContainer::addEvents() {
     auto listener = cocos2d::EventListenerMouse::create();
     listener->onMouseDown = [this](cocos2d::Event* event){
         cocos2d::EventMouse* EM = (cocos2d::EventMouse*)event;
-        this->ICellForSwap = this->iCellIsHit(EM);
-        if(this->ICellForSwap>=0){
-            if(EM->getMouseButton()==MOUSE_BUTTON_LEFT && InventoryScene::IPMovedItem==nullptr && !this->bIsCellEmpty(this->ICellForSwap)){
-                InventoryScene::IPMovedItem = this->Inventory.at(ICellForSwap).IPItemInCell;
-                InventoryScene::IPMovedItem->BIsGrabByUser = true;
-                cocos2d::log("Item from Cell:%i was grabbed with quantity %i",ICellForSwap, this->Inventory.at(ICellForSwap).IItemCount);
-            }else if(EM->getMouseButton() == MOUSE_BUTTON_RIGHT){
-            }
-
+		if (EM->getMouseButton() == MOUSE_BUTTON_LEFT) {
+			this->ICellForSwap = this->iCellIsHit(EM);
+			if (this->ICellForSwap >= 0) {
+				if (InventoryScene::IPMovedItem == nullptr && !this->bIsCellEmpty(this->ICellForSwap)) {
+					InventoryScene::IPMovedItem = this->Inventory.at(ICellForSwap).IPItemInCell;
+					InventoryScene::IPMovedItem->BIsGrabByUser = true;
+					cocos2d::log("Item from Cell:%i was grabbed with quantity %i", ICellForSwap, this->Inventory.at(ICellForSwap).IItemCount);
+				}
+			}
         }
     };
     listener->onMouseUp = [this](cocos2d::Event* event){
