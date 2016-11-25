@@ -2,23 +2,13 @@
 // Created by rusbaron on 10/8/16.
 //
 
-#include "ItemCell.h"
+#include "InventoryCell.h"
 #include "InventoryScene.h"
 
-ItemCell::ItemCell(){
-    this->IPItemInCell= nullptr;
-    this->IItemCount = 0;
+InventoryCell::InventoryCell():Cell(){
     this->ICellCost = 0;
 
-    this->SCellBg = cocos2d::Sprite::createWithSpriteFrameName("cellbg");
-    addChild(this->SCellBg,0);
-
-    ///Label,that present ItemCount in cell to player
     int FontSize = 16;
-    this->LItemCount= cocos2d::Label::createWithTTF("", "fonts/Marker Felt.ttf", FontSize);
-    this->LItemCount->setPosition(this->SCellBg->getContentSize().width/2-FontSize,this->SCellBg->getContentSize().height/2-FontSize);
-    addChild(this->LItemCount,50);
-
 	this->LCellCost = cocos2d::Label::createWithTTF("", "fonts/Marker Felt.ttf", FontSize);
 	this->LCellCost->setColor(cocos2d::Color3B::YELLOW);
 	this->LCellCost->setPosition(this->SCellBg->getContentSize().width / 2 - FontSize, -this->SCellBg->getContentSize().height / 2 + FontSize);
@@ -26,11 +16,10 @@ ItemCell::ItemCell(){
 
     this->ICellNumber=0;
 
-    this->setName("ItemCell");
-
+    this->setName("InventoryCell");
 }
 
-ItemCell::ItemCell(ItemCell& CellToCopy) {
+InventoryCell::InventoryCell(InventoryCell& CellToCopy){
     if (this != &CellToCopy) {
         ///Copy need for swapping throw tmp cell,so no need to create new copy of item,just link to the same address in memory
         this->IPItemInCell = CellToCopy.IPItemInCell;
@@ -52,34 +41,11 @@ ItemCell::ItemCell(ItemCell& CellToCopy) {
 		this->LCellCost->setPosition(this->SCellBg->getContentSize().width / 2 - FontSize, -this->SCellBg->getContentSize().height / 2 + FontSize);
 		addChild(this->LCellCost, 50);
 
-        this->setName("ItemCell");
+        this->setName("InventoryCell");
     }
 }
 
-ItemCell::ItemCell(ItemCell&& CellToMove) {
-    if (this != &CellToMove) {
-        this->IPItemInCell = CellToMove.IPItemInCell;
-        this->IItemCount = CellToMove.IItemCount;
-        this->ICellCost = CellToMove.ICellCost;
-        this->ICellNumber = CellToMove.ICellNumber;
-        this->SCellBg = CellToMove.SCellBg;
-        //CellToMove.SCellBg->removeFromParent();
-        CellToMove.removeChild(CellToMove.SCellBg, false);
-        addChild(this->SCellBg);
-
-        ///Label,that present ItemCount in cell to player
-        int FontSize = 16;
-        this->LItemCount = CellToMove.LItemCount;
-        //CellToMove.LItemCount->removeFromParent();
-        CellToMove.removeChild(CellToMove.LItemCount,false);
-        this->LItemCount->setPosition(this->SCellBg->getContentSize().width / 2 - FontSize, this->SCellBg->getContentSize().height / 2 - FontSize);
-        addChild(this->LItemCount, 50);
-
-        this->setName("ItemCell");
-    }
-}
-
-ItemCell& ItemCell::operator=(const ItemCell& CellToCopy) {
+InventoryCell& InventoryCell::operator=(const InventoryCell& CellToCopy) {
     if (this != &CellToCopy) {
         ///Copy need for swapping throw tmp cell,so no need to create new copy of item,just link to the same address in memory
         this->IPItemInCell = CellToCopy.IPItemInCell;
@@ -96,11 +62,11 @@ ItemCell& ItemCell::operator=(const ItemCell& CellToCopy) {
 }
 
 
-ItemCell::~ItemCell(){
+InventoryCell::~InventoryCell(){
     this->removeAllChildrenWithCleanup(true);
 }
 
-void ItemCell::updateLabels() {
+void InventoryCell::updateLabels() {
 	if (this->IPItemInCell != nullptr) {
 		if (this->IItemCount) {
 			this->LCellCost->setString("$"+std::to_string(this->ICellCost));
@@ -118,8 +84,25 @@ void ItemCell::updateLabels() {
 	}
 }
 
+//void InventoryCell::showActionMenu(){
+//    if(!this->bIsCellEmpty())
+//    {
+//        this->IPItemInCell->showAvailableActions();
+//    }
+//}
+
+void InventoryCell::putItemAtInventory(Item* ItPItemToPut,unsigned int UIItemCount=1){
+    this->IPItemInCell = ItPItemToPut;
+    this->IItemCount+=UIItemCount;
+    this->ICellCost+=ItPItemToPut->FItemCost*UIItemCount;
+
+    this->IPItemInCell->setPosition(this->getParent()->convertToWorldSpace(this->getPosition()));
+    //If item in cell equal with item to put-remove sprite from putting item
+    // if(this->IPItemInCell==*ItPItemToPut)
+}
+
 #if _DEBUG==1
-void ItemCell::showClickedCell() {
+void InventoryCell::showClickedCell() {
 	auto fadeIn = cocos2d::FadeIn::create(0.25f);
 	auto fadeOut = cocos2d::FadeOut::create(0.25f);
 	this->SCellBg->runAction(cocos2d::Sequence::create(fadeOut,fadeIn,nullptr ));

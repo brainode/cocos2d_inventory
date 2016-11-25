@@ -8,16 +8,26 @@
 
 #include "Item.h"
 
+
 class Consumable : public Item {
 public:
-    unsigned int //UIItemEffectVitality,
-            UIItemEffectStrenght,
-//            UIItemEffectAgility,
-//                UIRequiredMana,
-            UIItemEffectSpeed;
+    int IValue;
+    float FEffectDuration;
 
-    Consumable(int IItemIdInput,bool BIsStackableInput,cocos2d::Sprite* SPItemSpriteInput,float FItemCostInput,int IQuestIDInput=-1);
+    Consumable(
+            int IItemIdInput,
+            bool BIsStackableInput,
+            cocos2d::Sprite* SPItemSpriteInput,
+            float FItemCostInput,
+            int IValue,
+            float FEffectDuration,
+            int IQuestIDInput=-1);
     Consumable(const Consumable& ConsumableInput);
+
+    cocos2d::Node* showAvailableActions() override;
+    
+    bool doCompare(const Item& ItemRight) override;
+
     ~Consumable();
 };
 

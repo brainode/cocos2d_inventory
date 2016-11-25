@@ -9,11 +9,7 @@
 
 class Equipment : public Item{
 public:
-    int //UIItemEffectVitality,
-            IItemEffectStrenght;
-//            UIItemEffectAgility,
-//                UIRequiredMana,
-//            IItemEffectSpeed;
+    int IItemEffectStrenght;
 
     Equipment(int IItemIdInput,
               bool BIsStackableInput,
@@ -23,7 +19,9 @@ public:
               int IQuestIDInput=-1
     );
     ~Equipment();
+    virtual cocos2d::Node* showAvailableActions() override;
 
+    bool doCompare(const Item& ItemRight) override;
 };
 
 

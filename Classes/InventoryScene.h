@@ -3,7 +3,10 @@
 
 #include "cocos2d.h"
 #include "InventoryContainer.h"
-#include "Actors/Hero.h"
+//#include "Actors/Hero.h"
+#include "Items/Equipment.h"
+#include "Items/Consumable.h"
+#include "Items/Trash.h"
 
 class InventoryScene : public cocos2d::Layer
 {

@@ -4,9 +4,12 @@
 
 #ifndef MYGAME_ITEM_H
 #define MYGAME_ITEM_H
+#define _DEBUG 1
 
 
 #include "cocos2d.h"
+
+
 
 enum ItemType{EquipmentType=6,ConsumableType=4,TrashType=2};
 
@@ -14,22 +17,31 @@ class Item : public cocos2d::Node {
 
 public:
     bool BIsStackable;
+
     int IQuestID;
 	int IItemID;
 
     cocos2d::Sprite* SPItemSprite;
-	///Test var
+#if _DEBUG==1
 	cocos2d::Label* Grubbed;
-	///End of test
+#endif // DEBUG
     float FItemCost;
-
-    Item(int IItemID,bool BIsStackableInput,cocos2d::Sprite* SPItemSpriteInput,float FItemCostInput,int IQuestIDInput);
-    Item(const Item& ItemInput);
-    ~Item();
 
     bool BIsGrabByUser;
 
     ItemType EItemType;
+
+    Item(int IItemID,bool BIsStackableInput,cocos2d::Sprite* SPItemSpriteInput,float FItemCostInput,int IQuestIDInput);
+
+    Item(const Item& ItemInput);
+
+    ~Item();
+
+	bool operator==(const Item& ItemRight);
+    /*
+     * Virtual compare
+     */
+	virtual bool doCompare(const Item& ItemRight)=0;
 
     /*
      * Mouse events for moving Items
@@ -37,6 +49,10 @@ public:
     void addEvents();
 
     bool BIsHit(cocos2d::EventMouse* EInput);
+
+    virtual cocos2d::Node* showAvailableActions()=0;
+
+//    void hideAvailableActions()const;
 };
 
 

@@ -2,10 +2,11 @@
 // Created by rusbaron on 10/3/16.
 //
 
-#include <base/CCEventListenerMouse.h>
-#include <InventoryScene.h>
-#include "Item.h"
 
+#include "Item.h"
+#include "InventoryScene.h"
+#include "ui/CocosGUI.h"
+#include <base/CCEventListenerMouse.h>
 
 Item::Item(int IItemIDInput,bool BIsStackableInput,cocos2d::Sprite* SPItemSpriteInput,float FItemCostInput,int IQuestIDInput) {
     this->IItemID = IItemIDInput;
@@ -17,12 +18,12 @@ Item::Item(int IItemIDInput,bool BIsStackableInput,cocos2d::Sprite* SPItemSprite
     this->SPItemSprite= SPItemSpriteInput;
     addChild(this->SPItemSprite);
 
-	///Test block
+#if _DEBUG==1
 	this->Grubbed = cocos2d::Label::createWithTTF("false", "fonts/Marker Felt.ttf", 24);
 	this->Grubbed->setColor(cocos2d::Color3B::RED);
 	this->Grubbed->setPosition(cocos2d::Vec2(0, -50));
 	addChild(this->Grubbed);
-	///End of Test
+#endif // DEBUG
 
     this->FItemCost = FItemCostInput;
 
@@ -47,12 +48,12 @@ Item::Item(const Item& ItemInput){
 	
     addChild(this->SPItemSprite);
 
-	///Test block
+#if _DEBUG==1
 	this->Grubbed = cocos2d::Label::createWithTTF("false", "fonts/Marker Felt.ttf", 24);
 	this->Grubbed->setColor(cocos2d::Color3B::RED);
 	this->Grubbed->setPosition(cocos2d::Vec2(0, -50));
 	addChild(this->Grubbed);
-	///End of Test
+#endif // DEBUG
 
     this->FItemCost = ItemInput.FItemCost;
 
@@ -69,6 +70,14 @@ Item::Item(const Item& ItemInput){
 Item::~Item() {
     this->removeAllChildrenWithCleanup(true);
 }
+
+//void Item::hideAvailableActions()const{
+//    cocos2d::Node* NPActionButton;
+//    while((NPActionButton=this->getChildByName("actionButton"))!=nullptr)
+//    {
+//        NPActionButton->removeFromParentAndCleanup(true);
+//    }
+//}
 
 bool Item::BIsHit(cocos2d::EventMouse *EInput) {
     cocos2d::Vec2 V2MouseLocation = EInput->getLocation();
@@ -93,10 +102,10 @@ void Item::addEvents() {
         cocos2d::EventMouse* EM = (cocos2d::EventMouse*)event;
         if(this->BIsHit(EM) && EM->getMouseButton()==MOUSE_BUTTON_LEFT){
             this->BIsGrabByUser = true;
-			///Test block
+#if _DEBUG==1
 			this->Grubbed->setString("true");
 			this->Grubbed->setColor(cocos2d::Color3B::GREEN);
-			///End of test
+#endif // DEBUG
             InventoryScene::IPMovedItem = this;
         }
     };
@@ -112,13 +121,22 @@ void Item::addEvents() {
     listener->onMouseUp = [this](cocos2d::Event* event){
 		cocos2d::EventMouse* EM = (cocos2d::EventMouse*)event;
 		if (this->BIsGrabByUser && EM->getMouseButton() == MOUSE_BUTTON_LEFT) {
-			///Test block
+#if _DEBUG==1
 			this->Grubbed->setString("false");
 			this->Grubbed->setColor(cocos2d::Color3B::RED);
-			///End of test
+#endif // DEBUG
 			this->BIsGrabByUser = false;
 		}
     };
 
     cocos2d::Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(listener,30);
+}
+
+bool Item::operator==(const Item& ItemRight){
+    return this->BIsStackable == ItemRight.BIsStackable &&
+            this->FItemCost == ItemRight.FItemCost &&
+            this->IItemID == ItemRight.IItemID &&
+            this->IQuestID == ItemRight.IQuestID &&
+            this->EItemType == ItemRight.EItemType &&
+            doCompare(ItemRight);
 }

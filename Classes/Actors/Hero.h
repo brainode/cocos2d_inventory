@@ -5,29 +5,30 @@
 #ifndef MYGAME_HERO_H
 #define MYGAME_HERO_H
 
-
-#include <Items/Equipment.h>
-#include <InventoryContainer.h>
+#include "InventoryCell.h"
+#include "Items/Consumable.h"
 
 class Hero : public cocos2d::Node {
 private:
-    unsigned int UIVitality,
-                UIStrenght,
-                UIAgility,
-//                UIMana,
-                UISpeed;
+    int IHealth;
+    unsigned int UISpeed,UIPurse;
+    int IAttackValue;
+
+    InventoryCell ItCLeftArm, ItCRightArm;
+
+    cocos2d::Sprite* SPHeroSprite;
+
+    cocos2d::Label *LPPurse, *LPHeroHealth, *LPHeroSpeed;
+
+    void updateLabelHealth()const;
+    void updateLabelSpeed()const;
+    void updateLabelPurse()const;
+
 public:
-    cocos2d::Sprite* HeroSprite;
-
-//    const Equipment* EHead;
-//    const Equipment* EBody;
-    const Equipment* ELeftArm;
-    const Equipment* ERightArm;
-//    const Equipment* ELegs;
-//    const Equipment* EFoot;
-
     Hero();
     ~Hero();
+
+    void Heal(Consumable* CoPPotion);
 };
 
 

@@ -9,24 +9,30 @@
 #define _CELL_IN_ROW 4U
 
 #include <array>
-#include "Items/Item.h"
+#include "Actors/Hero.h"
 #include "cocos2d.h"
-#include "ui/CocosGUI.h"
-#include "ItemCell.h"
-
+//#include "ui/CocosGUI.h"
+#include "InventoryCell.h"
 
 enum ESortType{PRICE,TYPE};
 
 class InventoryContainer : public cocos2d::Node {
 private:
+    void addEvents();
 
+    cocos2d::Node* NPUseMenu;
+
+    Hero* HePInventoryOwner;
+
+    void clearUseMenu();
 public:
-    std::array<ItemCell,_INVENTORY_SIZE> Inventory;
+    std::array<InventoryCell,_INVENTORY_SIZE> Inventory;
 
-    InventoryContainer();
+    InventoryContainer(Hero* HePInventoryOwnerInput);
+
     ~InventoryContainer();
 
-    void addEvents();
+    InventoryCell& operator [](int ICellAtNumber);
     /*
      * Cell,that was grabbed
      */
@@ -49,10 +55,6 @@ public:
 	 *
 	 */
     void swapCells(unsigned int UICellFrom,unsigned int UICellTo);
-    /*
-     * Return true if items has equal type,price
-     */
-    bool bIsItemsEqual(Item* Left,Item* Right);
     /*
      * Return true if cell is empty
      */

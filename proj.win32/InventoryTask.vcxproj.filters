@@ -10,11 +10,11 @@
     <Filter Include="src">
       <UniqueIdentifier>{bb6c862e-70e9-49d9-81b7-3829a6f50471}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Actor">
-      <UniqueIdentifier>{adcdd67a-925a-4f4d-be8f-0959845352ff}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\Items">
       <UniqueIdentifier>{09ada8f1-62d0-45ef-9478-770fbb10fb55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Actors">
+      <UniqueIdentifier>{adcdd67a-925a-4f4d-be8f-0959845352ff}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -30,10 +30,7 @@
     <ClCompile Include="..\Classes\InventoryScene.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\ItemCell.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\Items\Item.cpp">
+    <ClCompile Include="..\Classes\InventoryCell.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\Items\Consumable.cpp">
@@ -46,7 +43,16 @@
       <Filter>src\Items</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\Actors\Hero.cpp">
-      <Filter>src\Actor</Filter>
+      <Filter>src\Actors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Cell.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Actors\ArmCell.cpp">
+      <Filter>src\Actors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Items\Item.cpp">
+      <Filter>src\Items</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -62,10 +68,7 @@
     <ClInclude Include="..\Classes\InventoryScene.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\ItemCell.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Items\Item.h">
+    <ClInclude Include="..\Classes\InventoryCell.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\Items\Consumable.h">
@@ -78,7 +81,22 @@
       <Filter>src\Items</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\Actors\Hero.h">
-      <Filter>src\Actor</Filter>
+      <Filter>src\Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="HeroActions.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="HeathAction.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Cell.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Actors\ArmCell.h">
+      <Filter>src\Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Items\Item.h">
+      <Filter>src\Items</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
