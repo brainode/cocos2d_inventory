@@ -111,6 +111,46 @@ void InventoryContainer::addEvents() {
             if(ICellHit>0 && !this->bIsCellEmpty(ICellHit))
             {
                 this->NPUseMenu = Inventory[ICellHit].IPItemInCell->showAvailableActions();
+                Node* useButtonNode = this->NPUseMenu->getChildByName("useButton");
+                auto useButton = static_cast<cocos2d::ui::Button*>(useButtonNode);
+                if(useButton)
+                {
+                    useButton->addClickEventListener([this,ICellHit](cocos2d::Ref* sender) {
+                        Inventory[ICellHit].IPItemInCell->useItem(this->HePInventoryOwner);
+                        this->deleteItems(ICellHit);
+
+                        this->NPUseMenu->removeAllChildrenWithCleanup(true);
+                        this->NPUseMenu->removeFromParentAndCleanup(true);
+                        this->NPUseMenu = nullptr;
+                    });
+                }
+                Node* sellButtonNode = this->NPUseMenu->getChildByName("sellButton");
+                auto sellButton = static_cast<cocos2d::ui::Button*>(sellButtonNode);
+                if (sellButton)
+                {
+                    sellButton->addClickEventListener([this, ICellHit](cocos2d::Ref* sender) {
+                        this->HePInventoryOwner->addMoneyToPurse(Inventory[ICellHit].ICellCost);
+                        this->deleteItems(ICellHit, Inventory[ICellHit].IItemCount);
+                        //this->clearCell(ICellHit);
+
+                        this->NPUseMenu->removeAllChildrenWithCleanup(true);
+                        this->NPUseMenu->removeFromParentAndCleanup(true);
+                        this->NPUseMenu = nullptr;
+                    });
+                }
+                Node* dropButtonNode = this->NPUseMenu->getChildByName("dropButton");
+                auto dropButton = static_cast<cocos2d::ui::Button*>(dropButtonNode);
+                if (dropButton)
+                {
+                    dropButton->addClickEventListener([this, ICellHit](cocos2d::Ref* sender) {
+                        this->deleteItems(ICellHit, Inventory[ICellHit].IItemCount);
+                        //this->clearCell(ICellHit);
+
+                        this->NPUseMenu->removeAllChildrenWithCleanup(true);
+                        this->NPUseMenu->removeFromParentAndCleanup(true);
+                        this->NPUseMenu = nullptr;
+                    });
+                }
                 addChild(this->NPUseMenu);
                 this->NPUseMenu->setPosition(Inventory[ICellHit].getPosition());
             }
@@ -257,7 +297,8 @@ void InventoryContainer::swapCells(unsigned int UICellFrom,unsigned int UICellTo
 
 void InventoryContainer::clearCell(unsigned int UICellToClear)
 {
-	this->Inventory.at(UICellToClear) = InventoryCell();
+    //this->Inventory[UICellToClear]
+	this->Inventory[UICellToClear] = InventoryCell();
 }
 
 void InventoryContainer::groupAllStackableItems()
@@ -359,5 +400,24 @@ void InventoryContainer::clearUseMenu(){
     if(this->NPUseMenu != nullptr){
         removeChild(this->NPUseMenu);
         this->NPUseMenu = nullptr;
+    }
+}
+
+
+void InventoryContainer::deleteItems(unsigned int UICell, unsigned int UIItemCount){
+    this->Inventory[UICell].deleteItemFromCell(UIItemCount);
+}
+
+void InventoryContainer::deleteItems(ItemType EItemTypeToDelete, unsigned int UIItemCount){
+    for (auto&& Cell : Inventory){
+        if(UIItemCount){
+            if (!bIsCellEmpty(Cell.ICellNumber) && Cell.IPItemInCell->EItemType == EItemTypeToDelete) {
+                unsigned int UIItemLeft = UIItemCount > Cell.IItemCount ? UIItemCount-Cell.IItemCount : 0;
+                Cell.deleteItemFromCell(UIItemCount);
+                UIItemCount = UIItemLeft;
+            }
+        }else{
+            break;
+        }
     }
 }

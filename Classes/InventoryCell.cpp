@@ -81,15 +81,11 @@ void InventoryCell::updateLabels() {
 			this->LItemCount->setString("");
 			this->LCellCost->setString("");
 		}
+	}else{
+        this->LItemCount->setString("");
+        this->LCellCost->setString("");
 	}
 }
-
-//void InventoryCell::showActionMenu(){
-//    if(!this->bIsCellEmpty())
-//    {
-//        this->IPItemInCell->showAvailableActions();
-//    }
-//}
 
 void InventoryCell::putItemAtInventory(Item* ItPItemToPut,unsigned int UIItemCount=1){
     this->IPItemInCell = ItPItemToPut;
@@ -99,6 +95,19 @@ void InventoryCell::putItemAtInventory(Item* ItPItemToPut,unsigned int UIItemCou
     this->IPItemInCell->setPosition(this->getParent()->convertToWorldSpace(this->getPosition()));
     //If item in cell equal with item to put-remove sprite from putting item
     // if(this->IPItemInCell==*ItPItemToPut)
+}
+
+void InventoryCell::deleteItemFromCell(int ICountItemToDelete)
+{
+    int ICountToDelete = ICountItemToDelete > this->IItemCount ? this->IItemCount : ICountItemToDelete;
+    this->IItemCount -= ICountToDelete;
+    this->ICellCost -= this->IPItemInCell->FItemCost*ICountToDelete;
+    if(!this->IItemCount)
+    {
+        this->IPItemInCell->removeFromParentAndCleanup(true);
+        this->IPItemInCell = nullptr;
+    }
+    this->updateLabels();
 }
 
 #if _DEBUG==1

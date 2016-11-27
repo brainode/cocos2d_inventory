@@ -6,13 +6,14 @@
 #define MYGAME_HERO_H
 
 #include "InventoryCell.h"
-#include "Items/Consumable.h"
+#include "Items/Item.h"
+//fixme.Change file position
+#include <proj.win32/Parameters.h>
+
 
 class Hero : public cocos2d::Node {
 private:
-    int IHealth;
-    unsigned int UISpeed,UIPurse;
-    int IAttackValue;
+    Parameters StHeroParameters;
 
     InventoryCell ItCLeftArm, ItCRightArm;
 
@@ -20,15 +21,15 @@ private:
 
     cocos2d::Label *LPPurse, *LPHeroHealth, *LPHeroSpeed;
 
-    void updateLabelHealth()const;
-    void updateLabelSpeed()const;
-    void updateLabelPurse()const;
+    void updateLabelParameters()const;
 
 public:
     Hero();
     ~Hero();
 
-    void Heal(Consumable* CoPPotion);
+    void UseConsumable(Item* ItPConsumable);
+
+    void addMoneyToPurse(unsigned int UIMoneyToAdd);
 };
 
 

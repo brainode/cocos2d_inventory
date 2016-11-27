@@ -4,6 +4,7 @@
 
 #include "Equipment.h"
 #include "ui/CocosGUI.h"
+#include <InventoryScene.h>
 
 Equipment::Equipment(int IItemIdInput,
                      bool BIsStackableInput,
@@ -18,7 +19,7 @@ Equipment::Equipment(int IItemIdInput,
 }
 cocos2d::Node* Equipment::showAvailableActions() {
     unsigned short USFontSize = 24;
-    float FScale = 2;
+    float FScale = 0.5;
 
     cocos2d::Node* NPMenu = new cocos2d::Node;
 
@@ -26,10 +27,10 @@ cocos2d::Node* Equipment::showAvailableActions() {
     useButton->setTitleText("Use");
     useButton->setTitleFontSize(USFontSize);
     useButton->setScale(FScale);
-    useButton->setName("actionButton");
-    useButton->addClickEventListener([this](cocos2d::Ref* sender) {
+    useButton->setName("useButton");
+    /*useButton->addClickEventListener([this](cocos2d::Ref* sender) {
         cocos2d::log("Clicked");
-    });
+    });*/
     NPMenu->addChild(useButton);
 
     if(this->IQuestID<0)
@@ -38,20 +39,20 @@ cocos2d::Node* Equipment::showAvailableActions() {
         sellButton->setTitleText("Sell");
         sellButton->setTitleFontSize(USFontSize);
         sellButton->setScale(FScale);
-        sellButton->setPosition(cocos2d::Vec2(0,-(useButton->getContentSize().height*2)));
-        sellButton->setName("actionButton");
-        sellButton->addClickEventListener([this](cocos2d::Ref* sender) {
-        });
+        sellButton->setPosition(cocos2d::Vec2(0,-(useButton->getContentSize().height*FScale)));
+        sellButton->setName("sellButton");
+        /*sellButton->addClickEventListener([this](cocos2d::Ref* sender) {
+        });*/
         NPMenu->addChild(sellButton);
 
         auto dropButton = cocos2d::ui::Button::create("menubutton.png", "menubutton_pressed.png");
         dropButton->setTitleText("Drop");
         dropButton->setTitleFontSize(USFontSize);
         dropButton->setScale(FScale);
-        dropButton->setPosition(cocos2d::Vec2(0, -(useButton->getContentSize().height*4)));
-        dropButton->setName("actionButton");
-        dropButton->addClickEventListener([this](cocos2d::Ref* sender) {
-        });
+        dropButton->setPosition(cocos2d::Vec2(0, -(useButton->getContentSize().height*FScale*2)));
+        dropButton->setName("dropButton");
+        /*dropButton->addClickEventListener([this](cocos2d::Ref* sender) {
+        });*/
         NPMenu->addChild(dropButton);
     }
     return NPMenu;
@@ -69,4 +70,12 @@ bool Equipment::doCompare(const Item& ItemRight){
         BIsEqual = (this->IItemEffectStrenght == pRightB->IItemEffectStrenght);
     }
     return BIsEqual;
+}
+
+void Equipment::useItem(void* PUserCalled) {
+    Hero* HePHeroUsedItem = static_cast<Hero*>(PUserCalled);
+    if (HePHeroUsedItem)
+    {
+        HePHeroUsedItem->UseConsumable(this);
+    }
 }

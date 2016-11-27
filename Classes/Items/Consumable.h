@@ -7,11 +7,13 @@
 
 
 #include "Item.h"
-
+//fixme.Change file position
+#include <proj.win32/Parameters.h>
 
 class Consumable : public Item {
 public:
-    int IValue;
+    Parameters StEffectUsage;
+
     float FEffectDuration;
 
     Consumable(
@@ -19,7 +21,7 @@ public:
             bool BIsStackableInput,
             cocos2d::Sprite* SPItemSpriteInput,
             float FItemCostInput,
-            int IValue,
+            Parameters StEffectUsageInput,
             float FEffectDuration,
             int IQuestIDInput=-1);
     Consumable(const Consumable& ConsumableInput);
@@ -27,6 +29,8 @@ public:
     cocos2d::Node* showAvailableActions() override;
     
     bool doCompare(const Item& ItemRight) override;
+
+    void useItem(void* PUserCalled) override;
 
     ~Consumable();
 };

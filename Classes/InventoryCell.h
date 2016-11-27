@@ -8,6 +8,7 @@
 #include "Cell.h"
 
 class InventoryCell : public Cell {
+private:
 public:
     int ICellCost;
     ///Label,that present Cell cost
@@ -29,12 +30,14 @@ public:
     ///*
     // * Show menu,that containt available actions for the Item
     // */
-    //void showActionMenu() override;
+    void showActionMenu();
 
     /*
      * Link item at cell,move at cell's center point
      */
     void putItemAtInventory(Item* ItPItemToPut,unsigned int UIItemCount) override;
+
+    void deleteItemFromCell(int ICountItemToDelete) override;
 
     ~InventoryCell();
 

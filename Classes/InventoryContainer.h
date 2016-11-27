@@ -47,9 +47,19 @@ public:
     cocos2d::Label* LInventoryMessage;
 
 	/*
-	 *
+	 * Add items to inventory cell
 	 */
     void addItems(Item* InputItem,unsigned int UICellClicked,unsigned int UIItemCount=1);
+
+    /*
+     * Delete item(s) from cell
+     */
+    void deleteItems(unsigned int UICell, unsigned int UIItemCount = 1);
+
+    /*
+    * Delete item(s) from cell
+    */
+    void deleteItems(ItemType EItemTypeToDelete, unsigned int UIItemCount);
 
 	/*
 	 *

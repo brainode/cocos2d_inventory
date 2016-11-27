@@ -1,4 +1,5 @@
 #include "InventoryScene.h"
+#include "proj.win32/ConsumableFactory.h"
 #include "SimpleAudioEngine.h"
 
 USING_NS_CC;
@@ -76,19 +77,19 @@ bool InventoryScene::init()
     Torch->setPosition(getContentSize().width/2-250,getContentSize().height/2);
     addChild(Torch);
 
-    Item* HealtPotion = new Consumable(1,true,cocos2d::Sprite::createWithSpriteFrameName("health_potion"),35,30,2.5);
+    Item* HealtPotion = ConsumableFactory::coPCreateHealtPotion();//new Consumable(1,true,cocos2d::Sprite::createWithSpriteFrameName("health_potion"),35,30,2.5);
     HealtPotion->setPosition(getContentSize().width/2-150,getContentSize().height/2-150);
     addChild(HealtPotion);
 
-    Item* HealtPotion2 = new Consumable(1,true,cocos2d::Sprite::createWithSpriteFrameName("health_potion"),35,30,2.5);
+    Item* HealtPotion2 = ConsumableFactory::coPCreateHealtPotion();
     HealtPotion2->setPosition(getContentSize().width/2-250,getContentSize().height/2-150);
     addChild(HealtPotion2);
 
-    Item* HealtPotion3 = new Consumable(1,true,cocos2d::Sprite::createWithSpriteFrameName("health_potion"),35,30,2.5);
+    Item* HealtPotion3 = ConsumableFactory::coPCreateHealtPotion();
     HealtPotion3->setPosition(getContentSize().width/2-350,getContentSize().height/2-150);
     addChild(HealtPotion3);
 
-    Item* HealtPotion4 = new Consumable(1,true,cocos2d::Sprite::createWithSpriteFrameName("health_potion"),35,30,2.5);
+    Item* HealtPotion4 = ConsumableFactory::coPCreateHealtPotion();
     HealtPotion4->setPosition(getContentSize().width/2-350,getContentSize().height/2-150);
     addChild(HealtPotion4);
 
@@ -111,7 +112,7 @@ bool InventoryScene::init()
     HornAndHooves2->setPosition(getContentSize().width/2-250,getContentSize().height/2+150);
     addChild(HornAndHooves2);
 
-    Item* SpeedPotion = new Consumable(2,true,cocos2d::Sprite::createWithSpriteFrameName("speed_potion"),35,50,5);
+    Item* SpeedPotion = ConsumableFactory::coPCreateSpeedPotion();
     SpeedPotion->setPosition(getContentSize().width/2-150,getContentSize().height/2+250);
     addChild(SpeedPotion);
 

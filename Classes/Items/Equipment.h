@@ -6,6 +6,8 @@
 #define MYGAME_EQUIPMENT_H
 
 #include "Item.h"
+//fixme.Change file position
+#include <proj.win32/Parameters.h>
 
 class Equipment : public Item{
 public:
@@ -22,6 +24,8 @@ public:
     virtual cocos2d::Node* showAvailableActions() override;
 
     bool doCompare(const Item& ItemRight) override;
+
+    void useItem(void* PUserCalled) override;
 };
 
 

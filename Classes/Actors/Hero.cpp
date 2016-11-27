@@ -3,15 +3,15 @@
 //
 
 #include "Hero.h"
-
+#include "Items/Consumable.h"
 
 Hero::Hero(){
     unsigned short USFontSize = 80;
 
-    this->IAttackValue = 5;
-    this->IHealth = 30;
-    this->UIPurse = 0;
-    this->UISpeed = 5;
+    this->StHeroParameters.IHealth = 30;
+    this->StHeroParameters.IAttackValue = 5;
+    this->StHeroParameters.UIPurse = 0;
+    this->StHeroParameters.UISpeed = 5;
 
     this->SPHeroSprite = cocos2d::Sprite::create("hero.png");
     addChild(this->SPHeroSprite);
@@ -29,38 +29,53 @@ Hero::Hero(){
     this->ItCRightArm.SCellBg->setOpacity(150);
     addChild(&this->ItCRightArm);
 
-    this->LPHeroHealth = cocos2d::Label::createWithTTF("Health:"+std::to_string(this->IHealth), "fonts/Marker Felt.ttf", USFontSize);
+    this->LPHeroHealth = cocos2d::Label::createWithTTF("Health:"+std::to_string(this->StHeroParameters.IHealth), "fonts/Marker Felt.ttf", USFontSize);
     this->LPHeroHealth->setPosition(-(this->SPHeroSprite->getContentSize().width / 2), -(this->SPHeroSprite->getContentSize().height / 2) - USFontSize * 1);
     addChild(this->LPHeroHealth);
-    this->LPHeroSpeed = cocos2d::Label::createWithTTF("Speed:"+std::to_string(this->UISpeed), "fonts/Marker Felt.ttf", USFontSize);
+    this->LPHeroSpeed = cocos2d::Label::createWithTTF("Speed:"+std::to_string(this->StHeroParameters.UISpeed), "fonts/Marker Felt.ttf", USFontSize);
     this->LPHeroSpeed->setPosition(-(this->SPHeroSprite->getContentSize().width / 2), -(this->SPHeroSprite->getContentSize().height / 2) - USFontSize * 2);
     addChild(this->LPHeroSpeed);
-    this->LPPurse = cocos2d::Label::createWithTTF("Money:"+std::to_string(this->UIPurse), "fonts/Marker Felt.ttf", USFontSize);
+    this->LPPurse = cocos2d::Label::createWithTTF("Money:"+std::to_string(this->StHeroParameters.UIPurse), "fonts/Marker Felt.ttf", USFontSize);
     this->LPPurse->setPosition(-(this->SPHeroSprite->getContentSize().width / 2), -(this->SPHeroSprite->getContentSize().height / 2) - USFontSize * 3);
     addChild(this->LPPurse);
 }
 
-void Hero::updateLabelHealth()const
+void Hero::updateLabelParameters()const
 {
-    this->LPHeroHealth->setString("Health:"+std::to_string(this->IHealth));
-}
-void Hero::updateLabelSpeed()const
-{
-    this->LPHeroSpeed->setString("Speed:" + std::to_string(this->UISpeed));
-}
-void Hero::updateLabelPurse()const
-{
-    this->LPPurse->setString("Money:" + std::to_string(this->UIPurse));
+    this->LPHeroHealth->setString("Health:"+std::to_string(this->StHeroParameters.IHealth));
+    this->LPHeroSpeed->setString("Speed:" + std::to_string(this->StHeroParameters.UISpeed));
+    this->LPPurse->setString("Money:" + std::to_string(this->StHeroParameters.UIPurse));
 }
 
-void Hero::Heal(Consumable* CoPPotion){
-    
-    auto Healing = cocos2d::CallFunc::create([this,CoPPotion]()
+void Hero::UseConsumable(Item* ItPConsumable){
+    auto CoPConsumable = static_cast<Consumable*>(ItPConsumable);
+    if(CoPConsumable)
     {
-        this->IHealth += CoPPotion->IValue;
-        this->updateLabelHealth();
-    });
-    this->runAction(cocos2d::Spawn::create(Healing,nullptr));
+        auto Use = cocos2d::CallFunc::create([this, CoPConsumable]()
+        {
+            this->StHeroParameters += CoPConsumable->StEffectUsage;
+            this->updateLabelParameters();
+        });
+        auto unUse = cocos2d::CallFunc::create([this, CoPConsumable]()
+        {
+            this->StHeroParameters -= CoPConsumable->StEffectUsage;
+            this->updateLabelParameters();
+        });
+        if(CoPConsumable->FEffectDuration>0)
+        {
+            auto delay = cocos2d::DelayTime::create(CoPConsumable->FEffectDuration);
+            this->runAction(cocos2d::Sequence::create(Use,delay,unUse, nullptr));
+        }else
+        {
+            this->runAction(cocos2d::Sequence::create(Use, nullptr));
+        }
+        //cocos2d::Spawn duplicate actions...Maybe bug. ITSaber-22 closed
+    }
+}
+
+void Hero::addMoneyToPurse(unsigned int UIMoneyToAdd){
+    this->StHeroParameters.UIPurse += UIMoneyToAdd;
+    this->updateLabelParameters();
 }
 
 Hero::~Hero(){

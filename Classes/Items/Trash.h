@@ -15,6 +15,7 @@ public:
 
     bool doCompare(const Item& ItemRight) override;
 
+    void useItem(void* PUserCalled) override;
     ~Trash();
 };
 

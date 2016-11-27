@@ -10,7 +10,6 @@
 #include "cocos2d.h"
 
 
-
 enum ItemType{EquipmentType=6,ConsumableType=4,TrashType=2};
 
 class Item : public cocos2d::Node {
@@ -42,6 +41,8 @@ public:
      * Virtual compare
      */
 	virtual bool doCompare(const Item& ItemRight)=0;
+
+    virtual void useItem(void* pUser)=0;
 
     /*
      * Mouse events for moving Items

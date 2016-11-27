@@ -32,8 +32,12 @@ public:
 	virtual void updateLabels()=0;
 
     //virtual void showActionMenu()=0;
-
+    
     virtual void putItemAtInventory(Item* ItPItemToPut,unsigned int UIItemCount)=0;
+
+    virtual void deleteItemFromCell(int ICountItemToDelete) = 0;
+
+    //virtual void clearCell() = 0;
 
     bool bIsCellEmpty()const;
 
