@@ -10,13 +10,14 @@ Equipment::Equipment(int IItemIdInput,
                      bool BIsStackableInput,
                      cocos2d::Sprite* SPItemSpriteInput,
                      float FItemCostInput,
-                     int IItemEffectStrenghtInput,
+                     Parameters StEffectEquipInput,
                      int IQuestIDInput
 ):Item(IItemIdInput,BIsStackableInput,SPItemSpriteInput,FItemCostInput,IQuestIDInput)
 {
 	this->EItemType = ItemType::EquipmentType;
-    this->IItemEffectStrenght=IItemEffectStrenghtInput;
+    this->StEffectEquip = StEffectEquipInput;
 }
+
 cocos2d::Node* Equipment::showAvailableActions() {
     unsigned short USFontSize = 24;
     float FScale = 0.5;
@@ -67,7 +68,7 @@ bool Equipment::doCompare(const Item& ItemRight){
     const Equipment* pRightB = dynamic_cast<const Equipment*>(&ItemRight);
     if (pRightB)
     {
-        BIsEqual = (this->IItemEffectStrenght == pRightB->IItemEffectStrenght);
+        BIsEqual = (this->StEffectEquip == pRightB->StEffectEquip);
     }
     return BIsEqual;
 }
@@ -76,6 +77,6 @@ void Equipment::useItem(void* PUserCalled) {
     Hero* HePHeroUsedItem = static_cast<Hero*>(PUserCalled);
     if (HePHeroUsedItem)
     {
-        HePHeroUsedItem->UseConsumable(this);
+        HePHeroUsedItem->useEquipment(this);
     }
 }

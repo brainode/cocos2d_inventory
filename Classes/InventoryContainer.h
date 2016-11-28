@@ -52,6 +52,11 @@ public:
     void addItems(Item* InputItem,unsigned int UICellClicked,unsigned int UIItemCount=1);
 
     /*
+     * Add item to first free or first cell with identity item if item stackable
+     */
+    void addItemsAtFirstAvailableCell(Item* InputItem, unsigned int UIItemCount = 1);
+
+    /*
      * Delete item(s) from cell
      */
     void deleteItems(unsigned int UICell, unsigned int UIItemCount = 1);

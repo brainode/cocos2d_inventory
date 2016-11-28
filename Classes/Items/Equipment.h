@@ -11,13 +11,13 @@
 
 class Equipment : public Item{
 public:
-    int IItemEffectStrenght;
+    Parameters StEffectEquip;
 
     Equipment(int IItemIdInput,
               bool BIsStackableInput,
               cocos2d::Sprite* SPItemSpriteInput,
               float FItemCostInput,
-              int IItemEffectStrenghtInput=0,
+              Parameters StEffectEquipInput,
               int IQuestIDInput=-1
     );
     ~Equipment();

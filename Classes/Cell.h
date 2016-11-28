@@ -11,11 +11,8 @@ class Cell : public cocos2d::Node{
 public:
     Item* IPItemInCell;
     int IItemCount;
-    int ICellCost;
     ///Label,that present ItemCount in cell to player
     cocos2d::Label* LItemCount;
-
-	cocos2d::Label* LCellCost;
 
     cocos2d::Sprite* SCellBg;
 
@@ -33,9 +30,11 @@ public:
 
     //virtual void showActionMenu()=0;
     
-    virtual void putItemAtInventory(Item* ItPItemToPut,unsigned int UIItemCount)=0;
+    virtual void putItemAtCell(Item* ItPItemToPut,unsigned int UIItemCount)=0;
 
     virtual void deleteItemFromCell(int ICountItemToDelete) = 0;
+
+    virtual void clearCell() = 0;
 
     //virtual void clearCell() = 0;
 

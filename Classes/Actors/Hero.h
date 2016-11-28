@@ -5,17 +5,19 @@
 #ifndef MYGAME_HERO_H
 #define MYGAME_HERO_H
 
-#include "InventoryCell.h"
+#include "ArmCell.h"
 #include "Items/Item.h"
 //fixme.Change file position
 #include <proj.win32/Parameters.h>
-
 
 class Hero : public cocos2d::Node {
 private:
     Parameters StHeroParameters;
 
-    InventoryCell ItCLeftArm, ItCRightArm;
+    ArmCell ArCLeftArm, ArCRightArm;
+    
+    //Pointer for inventory
+    void* IcPHeroInventory;
 
     cocos2d::Sprite* SPHeroSprite;
 
@@ -24,10 +26,19 @@ private:
     void updateLabelParameters()const;
 
 public:
+
     Hero();
     ~Hero();
 
-    void UseConsumable(Item* ItPConsumable);
+    void setInventory(void* pInventory);
+
+    void useConsumable(Item* ItPConsumable);
+    
+    void useEquipment(Item* ItPEquipment);
+
+    void unUseEquipment(Item* ItPEquipment);
+
+    void putItemAtInventory(Item* ItPEquipment);
 
     void addMoneyToPurse(unsigned int UIMoneyToAdd);
 };

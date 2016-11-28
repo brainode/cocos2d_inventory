@@ -87,7 +87,7 @@ void InventoryCell::updateLabels() {
 	}
 }
 
-void InventoryCell::putItemAtInventory(Item* ItPItemToPut,unsigned int UIItemCount=1){
+void InventoryCell::putItemAtCell(Item* ItPItemToPut,unsigned int UIItemCount=1){
     this->IPItemInCell = ItPItemToPut;
     this->IItemCount+=UIItemCount;
     this->ICellCost+=ItPItemToPut->FItemCost*UIItemCount;
@@ -102,12 +102,16 @@ void InventoryCell::deleteItemFromCell(int ICountItemToDelete)
     int ICountToDelete = ICountItemToDelete > this->IItemCount ? this->IItemCount : ICountItemToDelete;
     this->IItemCount -= ICountToDelete;
     this->ICellCost -= this->IPItemInCell->FItemCost*ICountToDelete;
-    if(!this->IItemCount)
+    if (!this->IItemCount)
     {
         this->IPItemInCell->removeFromParentAndCleanup(true);
         this->IPItemInCell = nullptr;
     }
     this->updateLabels();
+}
+
+void InventoryCell::clearCell(){
+    
 }
 
 #if _DEBUG==1

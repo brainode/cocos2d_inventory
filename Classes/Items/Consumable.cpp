@@ -40,7 +40,7 @@ void Consumable::useItem(void* PUserCalled){
     Hero* HePHeroUsedItem = static_cast<Hero*>(PUserCalled);
     if (HePHeroUsedItem)
     {
-        HePHeroUsedItem->UseConsumable(this);
+        HePHeroUsedItem->useConsumable(this);
     }
 }
 

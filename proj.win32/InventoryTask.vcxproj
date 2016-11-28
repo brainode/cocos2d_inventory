@@ -156,6 +156,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\Items\Item.cpp" />
     <ClCompile Include="..\Classes\Items\Trash.cpp" />
     <ClCompile Include="ConsumableFactory.cpp" />
+    <ClCompile Include="EquipmentFactory.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Parameters.cpp" />
   </ItemGroup>
@@ -172,6 +173,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\Items\Item.h" />
     <ClInclude Include="..\Classes\Items\Trash.h" />
     <ClInclude Include="ConsumableFactory.h" />
+    <ClInclude Include="EquipmentFactory.h" />
     <ClInclude Include="HeathAction.h" />
     <ClInclude Include="HeroActions.h" />
     <ClInclude Include="main.h" />

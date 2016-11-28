@@ -11,7 +11,7 @@ public:
         *1.Health parameter(int)
         *2.Speed parameter(unsigned int)
         *3.Purse parameter(unsigned int)
-        *4.Attacj parameter(int)
+        *4.Attack parameter(int)
         */
         Parameters StEffectUsage = {
             30,

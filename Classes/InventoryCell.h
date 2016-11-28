@@ -35,9 +35,11 @@ public:
     /*
      * Link item at cell,move at cell's center point
      */
-    void putItemAtInventory(Item* ItPItemToPut,unsigned int UIItemCount) override;
+    void putItemAtCell(Item* ItPItemToPut,unsigned int UIItemCount) override;
 
     void deleteItemFromCell(int ICountItemToDelete) override;
+
+    void clearCell() override;
 
     ~InventoryCell();
 

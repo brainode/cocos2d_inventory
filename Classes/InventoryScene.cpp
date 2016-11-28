@@ -1,5 +1,6 @@
 #include "InventoryScene.h"
 #include "proj.win32/ConsumableFactory.h"
+#include "proj.win32/EquipmentFactory.h"
 #include "SimpleAudioEngine.h"
 
 USING_NS_CC;
@@ -69,11 +70,11 @@ bool InventoryScene::init()
     PlayerInventory->setPosition(getContentSize().width/2,getContentSize().height/2);
     addChild(PlayerInventory);
 
-    Item* Sword = new Equipment(1,false,cocos2d::Sprite::createWithSpriteFrameName("sword"),100);
+    Item* Sword = EquipmentFactory::eqPCreateSword();
     Sword->setPosition(getContentSize().width/2-150,getContentSize().height/2);
     addChild(Sword);
 
-    Item* Torch = new Equipment(1,false,cocos2d::Sprite::createWithSpriteFrameName("torch"),80,0,0);
+    Item* Torch = EquipmentFactory::eqPCreateTorch();
     Torch->setPosition(getContentSize().width/2-250,getContentSize().height/2);
     addChild(Torch);
 

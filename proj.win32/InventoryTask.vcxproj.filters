@@ -60,6 +60,9 @@
     <ClCompile Include="ConsumableFactory.cpp">
       <Filter>src\Items</Filter>
     </ClCompile>
+    <ClCompile Include="EquipmentFactory.cpp">
+      <Filter>src\Items</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -108,6 +111,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="ConsumableFactory.h">
+      <Filter>src\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="EquipmentFactory.h">
       <Filter>src\Items</Filter>
     </ClInclude>
   </ItemGroup>

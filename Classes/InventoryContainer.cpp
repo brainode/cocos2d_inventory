@@ -14,6 +14,7 @@ InventoryContainer::InventoryContainer(Hero* HePInventoryOwnerInput) {
         ++UICounter;
     }
     this->HePInventoryOwner = HePInventoryOwnerInput;
+    this->HePInventoryOwner->setInventory(this);
 
     this->ICellForSwap = -1;
 
@@ -117,7 +118,15 @@ void InventoryContainer::addEvents() {
                 {
                     useButton->addClickEventListener([this,ICellHit](cocos2d::Ref* sender) {
                         Inventory[ICellHit].IPItemInCell->useItem(this->HePInventoryOwner);
-                        this->deleteItems(ICellHit);
+                        switch(Inventory[ICellHit].IPItemInCell->EItemType)
+                        {
+                            case EquipmentType:
+                                this->clearCell(ICellHit);
+                                break;
+                            default:
+                                this->deleteItems(ICellHit);
+                                break;
+                        }
 
                         this->NPUseMenu->removeAllChildrenWithCleanup(true);
                         this->NPUseMenu->removeFromParentAndCleanup(true);
@@ -223,6 +232,33 @@ void InventoryContainer::addItems(Item* InputItem,unsigned int UICellClicked,uns
     }else{
 		this->putItemOutsideInventory(InputItem,CellToUpdate.ICellNumber);
         this->showMessage(std::string("Quest item already exist in inventory!"));
+    }
+}
+
+void InventoryContainer::addItemsAtFirstAvailableCell(Item* InputItem, unsigned int UIItemCount){
+    bool bIsPlaced = false;
+    for(auto&& Cell : this->Inventory)
+    {
+        if(Cell.bIsCellEmpty()){
+            this->addItems(InputItem, Cell.ICellNumber,UIItemCount);
+            bIsPlaced = true;
+            break;
+        }else{
+            if(*Cell.IPItemInCell == *InputItem && InputItem->BIsStackable)
+            {
+                this->addItems(InputItem, Cell.ICellNumber, UIItemCount);
+                bIsPlaced = true;
+                break;
+            }
+        }
+    }
+    if(!bIsPlaced)
+    {
+        int ICellToPlaced = rand() % _INVENTORY_SIZE;
+        for(int IIter=0;IIter<UIItemCount;IIter++)
+        {
+            this->putItemOutsideInventory(InputItem, ICellToPlaced);
+        }
     }
 }
 
