@@ -15,9 +15,6 @@ private:
     Parameters StHeroParameters;
 
     ArmCell ArCLeftArm, ArCRightArm;
-    
-    //Pointer for inventory
-    void* IcPHeroInventory;
 
     cocos2d::Sprite* SPHeroSprite;
 
@@ -26,6 +23,8 @@ private:
     void updateLabelParameters()const;
 
 public:
+    //Pointer for inventory
+    void* IcPHeroInventory;
 
     Hero();
     ~Hero();
@@ -41,6 +40,8 @@ public:
     void putItemAtInventory(Item* ItPEquipment);
 
     void addMoneyToPurse(unsigned int UIMoneyToAdd);
+
+    bool bIsArmHitted(cocos2d::Event* event);
 };
 
 

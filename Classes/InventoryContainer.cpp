@@ -59,6 +59,25 @@ InventoryContainer::InventoryContainer(Hero* HePInventoryOwnerInput) {
 	});
     addChild(ButTypeSortButton);
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /*
+     * Remove item menu
+     */
+    cocos2d::ui::Button* RemoveButton = cocos2d::ui::Button::create("menubutton.png", "menubutton_pressed.png");
+    RemoveButton->setTitleText("Remove");
+    RemoveButton->setTitleColor(cocos2d::Color3B::BLACK);
+    RemoveButton->setTitleFontSize(UIFontSize);
+    RemoveButton->setPosition(cocos2d::Vec2(
+        this->Inventory.at(0).getPosition().x + this->Inventory[0].SCellBg->getContentSize().width / 2,
+        this->Inventory.at(0).getPosition().y - this->Inventory[0].SCellBg->getContentSize().height / 2 - ButPriceSortButton->getContentSize().height / 2
+    ));
+    ButPriceSortButton->addClickEventListener([this](cocos2d::Ref* sender) {
+        this->sortInventory(ESortType::PRICE);
+    });
+    addChild(ButPriceSortButton);
+
+    
+     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     this->setName("ItemContainer");
 
     this->addEvents();
@@ -109,7 +128,7 @@ void InventoryContainer::addEvents() {
         }else if(EM->getMouseButton() == MOUSE_BUTTON_RIGHT)
         {
             int ICellHit = this->iCellIsHit(EM);
-            if(ICellHit>0 && !this->bIsCellEmpty(ICellHit))
+            if(ICellHit>=0 && !this->bIsCellEmpty(ICellHit))
             {
                 this->NPUseMenu = Inventory[ICellHit].IPItemInCell->showAvailableActions();
                 Node* useButtonNode = this->NPUseMenu->getChildByName("useButton");
@@ -186,7 +205,11 @@ void InventoryContainer::addEvents() {
                 if (this->Inventory.at(ICellForSwap).IPItemInCell->IQuestID<0) {
                     this->putItemOutsideInventory(ICellForSwap, EM);
                 }
-                else {
+                else if (this->HePInventoryOwner->bIsArmHitted(event) && InventoryScene::IPMovedItem->EItemType == ItemType::EquipmentType) {
+                    this->Inventory[ICellForSwap].clearCell();
+                }
+                else
+                {
                     InventoryScene::IPMovedItem->setPosition(this->convertToWorldSpace(this->Inventory.at(ICellForSwap).getPosition()));
                     this->showMessage(std::string("Quest item can't be removed!"));
                 }

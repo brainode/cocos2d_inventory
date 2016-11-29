@@ -140,6 +140,11 @@ void Hero::addMoneyToPurse(unsigned int UIMoneyToAdd){
     this->updateLabelParameters();
 }
 
-Hero::~Hero(){
+bool Hero::bIsArmHitted(cocos2d::Event* event){
+    cocos2d::EventMouse* EM = static_cast<cocos2d::EventMouse*>(event);
+    return this->ArCLeftArm.bCellIsHit(EM) || this->ArCRightArm.bCellIsHit(EM);
+}
+
+Hero::~Hero() {
     this->removeAllChildrenWithCleanup(true);
 }

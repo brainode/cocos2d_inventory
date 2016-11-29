@@ -73,7 +73,7 @@ void ArmCell::addEvents(){
     listener->onMouseDown = [this](cocos2d::Event* event) {
         cocos2d::EventMouse* EM = static_cast<cocos2d::EventMouse*>(event);
         if (EM->getMouseButton() == MOUSE_BUTTON_LEFT) {
-            if(this->bCellIsHit(EM))
+            if(this->bCellIsHit(EM) && !this->bIsCellEmpty())
             {
                 this->BGrabbedFromCell = true;
                 Hero* HePHero = static_cast<Hero*>(this->getParent());
@@ -83,7 +83,7 @@ void ArmCell::addEvents(){
         }
         else if (EM->getMouseButton() == MOUSE_BUTTON_RIGHT)
         {
-            this->bCellIsHit(EM);
+            //if(this->bCellIsHit(EM);
         }
     };
     listener->onMouseUp = [this](cocos2d::Event* event) {
@@ -91,15 +91,24 @@ void ArmCell::addEvents(){
         if (EM->getMouseButton() == MOUSE_BUTTON_LEFT)
         {
             Hero* HePHero = static_cast<Hero*>(this->getParent());
+            InventoryContainer* IcPInventory = static_cast<InventoryContainer*>(HePHero->IcPHeroInventory);
             if(this->bCellIsHit(EM) && InventoryScene::IPMovedItem && InventoryScene::IPMovedItem->EItemType == ItemType::EquipmentType && this->bIsCellEmpty())
             {
-                this->putItemAtCell(InventoryScene::IPMovedItem);
-                //HePHero->useEquipment(InventoryScene::IPMovedItem);
-            }else if(this->bCellIsHit(EM) && InventoryScene::IPMovedItem)
+                HePHero->useEquipment(InventoryScene::IPMovedItem);
+            }
+            else if (this->bCellIsHit(EM) && this->BGrabbedFromCell )
+            {
+                HePHero->useEquipment(InventoryScene::IPMovedItem);
+            }
+            else if (this->bCellIsHit(EM) && InventoryScene::IPMovedItem)
             {
                 HePHero->putItemAtInventory(InventoryScene::IPMovedItem);
                 //this->putItemAtInventory(InventoryScene::IPMovedItem);
+            }else if(this->BGrabbedFromCell && InventoryScene::IPMovedItem->IQuestID>=0 && IcPInventory && IcPInventory->iCellIsHit(EM) < 0 && !HePHero->bIsArmHitted(EM))
+            {
+                HePHero->putItemAtInventory(InventoryScene::IPMovedItem);
             }
+            this->BGrabbedFromCell = false;
         }
     };
     cocos2d::Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(listener, 30);

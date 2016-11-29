@@ -111,7 +111,10 @@ void InventoryCell::deleteItemFromCell(int ICountItemToDelete)
 }
 
 void InventoryCell::clearCell(){
-    
+    this->IItemCount = 0;
+    this->ICellCost = 0;
+    this->IPItemInCell = nullptr;
+    this->updateLabels();
 }
 
 #if _DEBUG==1
