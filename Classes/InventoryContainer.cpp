@@ -2,7 +2,8 @@
 // Created by rusbaron on 10/5/16.
 //
 #include "InventoryScene.h"
-#include "ui/CocosGUI.h"
+
+#include <iostream>
 
 InventoryContainer::InventoryContainer(Hero* HePInventoryOwnerInput) {
     unsigned int UICounter = 0;
@@ -21,6 +22,7 @@ InventoryContainer::InventoryContainer(Hero* HePInventoryOwnerInput) {
     this->NPUseMenu = nullptr;
 
     unsigned int UIFontSize = 24;
+    
     this->LInventoryMessage = cocos2d::Label::createWithTTF("", "fonts/Marker Felt.ttf", UIFontSize);
     //X position - left corner of inventory,get from first Cell
     //Y position - y center position of higher cell(last cell) + half cell height + font size correction
@@ -63,18 +65,211 @@ InventoryContainer::InventoryContainer(Hero* HePInventoryOwnerInput) {
     /*
      * Remove item menu
      */
+
+    cocos2d::ui::CheckBox *CbPEqipment, *CbPConsumable, *CbPTrash;
+    cocos2d::ui::EditBox *EbPCellNumber, *EbPItemCount;
+
+    unsigned int UIFontSizeRemoveMenu = 15;
+    unsigned int UIMaxLenght = 2;
+    float FScale = 0.5;
+
+    this->CbPEqipment = cocos2d::ui::CheckBox::create("check_box_normal.png",
+        "check_box_normal_press.png",
+        "check_box_active.png",
+        "check_box_normal_disable.png",
+        "check_box_active_disable.png");
+    auto CheckboxEqLabel = cocos2d::Label::createWithTTF("Equipment", "fonts/Marker Felt.ttf", UIFontSizeRemoveMenu);
+    CheckboxEqLabel->setTextColor(cocos2d::Color4B::WHITE);
+    this->CbPEqipment->setScale(FScale);
+    this->CbPEqipment->setPosition(cocos2d::Vec2(
+        this->Inventory[_CELL_IN_ROW - 1].getPosition().x + this->Inventory[0].SCellBg->getContentSize().width,
+        this->Inventory[_INVENTORY_SIZE - 1].getPosition().y
+    ));
+    CheckboxEqLabel->setPosition(cocos2d::Vec2(
+        this->Inventory[_CELL_IN_ROW - 1].getPosition().x + this->Inventory[0].SCellBg->getContentSize().width*1.5,
+        this->Inventory[_INVENTORY_SIZE - 1].getPosition().y
+    ));
+    addChild(CheckboxEqLabel);
+   
+
+    this->CbPConsumable = cocos2d::ui::CheckBox::create("check_box_normal.png",
+        "check_box_normal_press.png",
+        "check_box_active.png",
+        "check_box_normal_disable.png",
+        "check_box_active_disable.png");
+    auto CheckboxCoLabel = cocos2d::Label::createWithTTF("Consumable", "fonts/Marker Felt.ttf", UIFontSizeRemoveMenu);
+    CheckboxCoLabel->setTextColor(cocos2d::Color4B::WHITE);
+    this->CbPConsumable->setScale(FScale);
+    this->CbPConsumable->setPosition(cocos2d::Vec2(
+        this->Inventory[_CELL_IN_ROW - 1].getPosition().x + this->Inventory[0].SCellBg->getContentSize().width,
+        this->Inventory[_INVENTORY_SIZE - 1].getPosition().y - this->CbPEqipment->getContentSize().height
+    ));
+    CheckboxCoLabel->setPosition(cocos2d::Vec2(
+        this->Inventory[_CELL_IN_ROW - 1].getPosition().x + this->Inventory[0].SCellBg->getContentSize().width*1.5,
+        this->Inventory[_INVENTORY_SIZE - _CELL_IN_ROW].getPosition().y - this->CbPEqipment->getContentSize().height
+    ));
+    addChild(CheckboxCoLabel);
+    
+
+    this->CbPTrash = cocos2d::ui::CheckBox::create("check_box_normal.png",
+        "check_box_normal_press.png",
+        "check_box_active.png",
+        "check_box_normal_disable.png",
+        "check_box_active_disable.png");
+    auto CheckboxTrLabel = cocos2d::Label::createWithTTF("Trash", "fonts/Marker Felt.ttf", UIFontSizeRemoveMenu);
+    CheckboxTrLabel->setTextColor(cocos2d::Color4B::WHITE);
+    this->CbPTrash->setScale(FScale);
+    this->CbPTrash->setPosition(cocos2d::Vec2(
+        this->Inventory[_CELL_IN_ROW - 1].getPosition().x + this->Inventory[0].SCellBg->getContentSize().width,
+        this->Inventory[_INVENTORY_SIZE - 1].getPosition().y - this->CbPEqipment->getContentSize().height*2
+    ));
+    CheckboxTrLabel->setPosition(cocos2d::Vec2(
+        this->Inventory[_CELL_IN_ROW - 1].getPosition().x + this->Inventory[0].SCellBg->getContentSize().width*1.5,
+        this->Inventory[_INVENTORY_SIZE - 1].getPosition().y - this->CbPEqipment->getContentSize().height*2
+    ));
+    addChild(CheckboxTrLabel);
+    
+
+    this->CbPEqipment->addClickEventListener([this](cocos2d::Ref* sender) {
+        this->CbPConsumable->setSelectedState(false);
+        this->CbPTrash->setSelectedState(false);
+    });
+    this->CbPConsumable->addClickEventListener([this](cocos2d::Ref* sender) {
+        this->CbPEqipment->setSelectedState(false);
+        this->CbPTrash->setSelectedState(false);
+
+    });
+    this->CbPTrash->addClickEventListener([this](cocos2d::Ref* sender) {
+        this->CbPConsumable->setSelectedState(false);
+        this->CbPEqipment->setSelectedState(false);
+
+    });
+
+    this->addChild(this->CbPEqipment);
+    this->addChild(this->CbPConsumable);
+    this->addChild(this->CbPTrash);
+    
+    /*
+     * Edit boxes
+     */
+    cocos2d::Size EditBoxSize = cocos2d::Size(200, 50);
+
+    this->EbPItemCount = cocos2d::ui::EditBox::create(EditBoxSize,cocos2d::ui::Scale9Sprite::create(std::string("countinputfon.png")) );
+    this->EbPItemCount->setPosition(cocos2d::Vec2(
+        this->Inventory[_CELL_IN_ROW - 1].getPosition().x + this->Inventory[0].SCellBg->getContentSize().width*1.5,
+        this->Inventory[_INVENTORY_SIZE - 1].getPosition().y - this->CbPEqipment->getContentSize().height * 3
+    ));
+    this->EbPItemCount->setInputMode(cocos2d::ui::EditBox::InputMode::NUMERIC);
+    this->EbPItemCount->setMaxLength(UIMaxLenght);
+    this->EbPItemCount->setFontSize(UIFontSizeRemoveMenu);
+    this->EbPItemCount->setPlaceHolder("Type item count");
+    this->EbPItemCount->setPlaceholderFontSize(UIFontSizeRemoveMenu);
+
+    this->EbPCellNumber = cocos2d::ui::EditBox::create(EditBoxSize, cocos2d::ui::Scale9Sprite::create(std::string("countinputfon.png")));
+    this->EbPCellNumber->setPosition(cocos2d::Vec2(
+        this->Inventory[_CELL_IN_ROW - 1].getPosition().x + this->Inventory[0].SCellBg->getContentSize().width*1.5,
+        this->Inventory[_INVENTORY_SIZE - 1].getPosition().y - this->CbPEqipment->getContentSize().height * 3 - EditBoxSize.height
+    ));
+    this->EbPCellNumber->setInputMode(cocos2d::ui::EditBox::InputMode::NUMERIC);
+    this->EbPCellNumber->setMaxLength(UIMaxLenght);
+    this->EbPCellNumber->setFontSize(UIFontSizeRemoveMenu);
+    this->EbPCellNumber->setPlaceHolder("Type cell noumber");
+    this->EbPCellNumber->setPlaceholderFontSize(UIFontSizeRemoveMenu);
+
+    addChild(this->EbPItemCount);
+    addChild(this->EbPCellNumber);
+    /*
+     * Remove button
+     */
     cocos2d::ui::Button* RemoveButton = cocos2d::ui::Button::create("menubutton.png", "menubutton_pressed.png");
     RemoveButton->setTitleText("Remove");
     RemoveButton->setTitleColor(cocos2d::Color3B::BLACK);
     RemoveButton->setTitleFontSize(UIFontSize);
     RemoveButton->setPosition(cocos2d::Vec2(
-        this->Inventory.at(0).getPosition().x + this->Inventory[0].SCellBg->getContentSize().width / 2,
-        this->Inventory.at(0).getPosition().y - this->Inventory[0].SCellBg->getContentSize().height / 2 - ButPriceSortButton->getContentSize().height / 2
+        this->Inventory[_CELL_IN_ROW - 1].getPosition().x + this->Inventory[0].SCellBg->getContentSize().width*1.5,
+        this->Inventory[_CELL_IN_ROW - 1].getPosition().y
     ));
-    ButPriceSortButton->addClickEventListener([this](cocos2d::Ref* sender) {
-        this->sortInventory(ESortType::PRICE);
+
+    RemoveButton->addClickEventListener([this](cocos2d::Ref* sender) {
+        ItemType EItemTypeToDelete = ItemType::NONE;
+        int ICellToDelete = -1;
+        int ICountToDelete = -1;
+        bool BCheckboxEq = this->CbPEqipment->getSelectedState();
+        bool BCheckboxCo = this->CbPConsumable->getSelectedState();
+        bool BCheckboxTr = this->CbPTrash->getSelectedState();
+        ////Set conditions to delete
+        if(BCheckboxEq)
+        {
+            EItemTypeToDelete = EquipmentType;
+        }
+        if (BCheckboxCo)
+        {
+            EItemTypeToDelete = ConsumableType;
+        }
+        if (BCheckboxTr)
+        {
+            EItemTypeToDelete = TrashType;
+        }
+        if(std::strlen(this->EbPItemCount->getText()) != 0)
+        {
+            ICountToDelete = std::stoi(this->EbPItemCount->getText());
+        }
+        if (std::strlen(this->EbPCellNumber->getText()) != 0)
+        {
+            if(std::stoi(this->EbPCellNumber->getText()) <= _INVENTORY_SIZE && std::stoi(this->EbPCellNumber->getText())>0)
+            {
+                ICellToDelete = std::stoi(this->EbPCellNumber->getText()) - 1;
+            }
+        }
+        ////Start deleting
+        if(ICellToDelete>=0)
+        {
+            if(EItemTypeToDelete == ItemType::NONE && !this->bIsCellEmpty(ICellToDelete))
+            {
+                if(ICountToDelete<0)
+                {
+                    this->deleteAllItems(ICellToDelete);
+                }else
+                {
+                    if(this->Inventory[ICellToDelete].IPItemInCell->IQuestID<0)
+                    {
+                        this->deleteItems(ICellToDelete, ICountToDelete);
+                    }
+                }
+                
+            }else if(!this->bIsCellEmpty(ICellToDelete))
+            {
+                if(this->Inventory[ICellToDelete].IPItemInCell->EItemType == EItemTypeToDelete)
+                {
+                    if(ICountToDelete<0)
+                    {
+                        this->deleteAllItems(ICellToDelete);
+                    }else
+                    {
+                        if (this->Inventory[ICellToDelete].IPItemInCell->IQuestID<0)
+                        {
+                            this->deleteItems(ICellToDelete, ICountToDelete);
+                        }
+                    }
+                    
+                }
+            }
+        }else
+        {
+            if(EItemTypeToDelete != ItemType::NONE)
+            {
+                if(ICountToDelete<0)
+                {
+                    this->deleteAllItems(EItemTypeToDelete);
+                }else
+                {
+                    this->deleteItems(EItemTypeToDelete, ICountToDelete);
+                }
+            }
+        }
+        this->clearRemoveMenu();
     });
-    addChild(ButPriceSortButton);
+    addChild(RemoveButton);
 
     
      //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -470,7 +665,7 @@ void InventoryContainer::deleteItems(unsigned int UICell, unsigned int UIItemCou
 void InventoryContainer::deleteItems(ItemType EItemTypeToDelete, unsigned int UIItemCount){
     for (auto&& Cell : Inventory){
         if(UIItemCount){
-            if (!bIsCellEmpty(Cell.ICellNumber) && Cell.IPItemInCell->EItemType == EItemTypeToDelete) {
+            if (!bIsCellEmpty(Cell.ICellNumber) && Cell.IPItemInCell->EItemType == EItemTypeToDelete && Cell.IPItemInCell->IQuestID<0) {
                 unsigned int UIItemLeft = UIItemCount > Cell.IItemCount ? UIItemCount-Cell.IItemCount : 0;
                 Cell.deleteItemFromCell(UIItemCount);
                 UIItemCount = UIItemLeft;
@@ -479,4 +674,29 @@ void InventoryContainer::deleteItems(ItemType EItemTypeToDelete, unsigned int UI
             break;
         }
     }
+}
+
+void InventoryContainer::deleteAllItems(unsigned int UICell){
+    if(!this->Inventory[UICell].bIsCellEmpty() && this->Inventory[UICell].IPItemInCell->IQuestID<0)
+    {
+        this->Inventory[UICell].deleteItemFromCell(this->Inventory[UICell].IItemCount);
+    }
+}
+
+void InventoryContainer::deleteAllItems(ItemType EItemTypeToDelete){
+    for (auto&& Cell : Inventory) {
+            if (!bIsCellEmpty(Cell.ICellNumber) && Cell.IPItemInCell->EItemType == EItemTypeToDelete && Cell.IPItemInCell->IQuestID<0) {
+                Cell.deleteItemFromCell(Cell.IItemCount);
+            }
+    }
+}
+
+void InventoryContainer::clearRemoveMenu()
+{
+    this->CbPEqipment->setSelectedState(false);
+    this->CbPConsumable->setSelectedState(false);
+    this->CbPTrash->setSelectedState(false);
+
+    this->EbPCellNumber->setText("");
+    this->EbPItemCount->setText("");
 }

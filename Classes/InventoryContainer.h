@@ -11,7 +11,7 @@
 #include <array>
 #include "Actors/Hero.h"
 #include "cocos2d.h"
-//#include "ui/CocosGUI.h"
+#include "ui/CocosGUI.h"
 #include "InventoryCell.h"
 
 enum ESortType{PRICE,TYPE};
@@ -22,9 +22,14 @@ private:
 
     cocos2d::Node* NPUseMenu;
 
+    cocos2d::ui::CheckBox *CbPEqipment, *CbPConsumable, *CbPTrash;
+    cocos2d::ui::EditBox *EbPCellNumber, *EbPItemCount;
+
     Hero* HePInventoryOwner;
 
     void clearUseMenu();
+
+    void clearRemoveMenu();
 public:
     std::array<InventoryCell,_INVENTORY_SIZE> Inventory;
 
@@ -62,9 +67,19 @@ public:
     void deleteItems(unsigned int UICell, unsigned int UIItemCount = 1);
 
     /*
+    * Delete all items from cell
+    */
+    void deleteAllItems(unsigned int UICell);
+
+    /*
     * Delete item(s) from cell
     */
     void deleteItems(ItemType EItemTypeToDelete, unsigned int UIItemCount);
+
+    /*
+    * Delete all items for selected type
+    */
+    void deleteAllItems(ItemType EItemTypeToDelete);
 
 	/*
 	 *

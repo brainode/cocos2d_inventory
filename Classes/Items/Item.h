@@ -10,7 +10,7 @@
 #include "cocos2d.h"
 
 
-enum ItemType{EquipmentType=6,ConsumableType=4,TrashType=2};
+enum ItemType{EquipmentType=6,ConsumableType=4,TrashType=2,NONE=0};
 
 class Item : public cocos2d::Node {
 
