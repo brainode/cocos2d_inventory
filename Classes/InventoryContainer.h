@@ -27,9 +27,15 @@ private:
 
     Hero* HePInventoryOwner;
 
+    bool bIsItemMenuClicked(cocos2d::EventMouse* EInput) const;
+    /*
+     * Delete item menu
+     */
     void clearUseMenu();
-
-    void clearRemoveMenu();
+    /*
+     * Uncheck all checkboxs,and clear text input fields for Remove Menu
+     */
+    void clearRemoveMenu() const;
 public:
     std::array<InventoryCell,_INVENTORY_SIZE> Inventory;
 

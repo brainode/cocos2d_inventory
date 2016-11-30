@@ -43,7 +43,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
         director->setOpenGLView(glview);
     }
     // Hide standart cursor
-    glview->setCursorVisible(false);
+    glview->setCursorVisible(true);
     // turn on display FPS
     director->setDisplayStats(true);
 

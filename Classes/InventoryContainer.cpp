@@ -312,6 +312,10 @@ void InventoryContainer::addEvents() {
         cocos2d::EventMouse* EM = static_cast<cocos2d::EventMouse*>(event);
         //this->clearUseMenu();
 		if (EM->getMouseButton() == MOUSE_BUTTON_LEFT) {
+            if (this->NPUseMenu && this->bIsItemMenuClicked(EM))
+            {
+                this->clearUseMenu();
+            }
             this->ICellForSwap = this->iCellIsHit(EM);
             if (this->ICellForSwap >= 0) {
 				if (InventoryScene::IPMovedItem == nullptr && !this->bIsCellEmpty(this->ICellForSwap)) {
@@ -342,9 +346,7 @@ void InventoryContainer::addEvents() {
                                 break;
                         }
 
-                        this->NPUseMenu->removeAllChildrenWithCleanup(true);
-                        this->NPUseMenu->removeFromParentAndCleanup(true);
-                        this->NPUseMenu = nullptr;
+                        this->clearUseMenu();
                     });
                 }
                 Node* sellButtonNode = this->NPUseMenu->getChildByName("sellButton");
@@ -354,11 +356,8 @@ void InventoryContainer::addEvents() {
                     sellButton->addClickEventListener([this, ICellHit](cocos2d::Ref* sender) {
                         this->HePInventoryOwner->addMoneyToPurse(Inventory[ICellHit].ICellCost);
                         this->deleteItems(ICellHit, Inventory[ICellHit].IItemCount);
-                        //this->clearCell(ICellHit);
 
-                        this->NPUseMenu->removeAllChildrenWithCleanup(true);
-                        this->NPUseMenu->removeFromParentAndCleanup(true);
-                        this->NPUseMenu = nullptr;
+                        this->clearUseMenu();
                     });
                 }
                 Node* dropButtonNode = this->NPUseMenu->getChildByName("dropButton");
@@ -367,15 +366,15 @@ void InventoryContainer::addEvents() {
                 {
                     dropButton->addClickEventListener([this, ICellHit](cocos2d::Ref* sender) {
                         this->deleteItems(ICellHit, Inventory[ICellHit].IItemCount);
-                        //this->clearCell(ICellHit);
 
-                        this->NPUseMenu->removeAllChildrenWithCleanup(true);
-                        this->NPUseMenu->removeFromParentAndCleanup(true);
-                        this->NPUseMenu = nullptr;
+                        this->clearUseMenu();
                     });
                 }
-                addChild(this->NPUseMenu);
-                this->NPUseMenu->setPosition(Inventory[ICellHit].getPosition());
+                /////Cursor has 1000 priority
+                this->getParent()->addChild(this->NPUseMenu, 999);
+                this->NPUseMenu->setPosition(
+                    this->convertToWorldSpace(Inventory[ICellHit].getPosition())
+                );
             }
         }
     };
@@ -651,8 +650,9 @@ void InventoryContainer::showMessage(std::string messageText){
 }
 
 void InventoryContainer::clearUseMenu(){
-    if(this->NPUseMenu != nullptr){
-        removeChild(this->NPUseMenu);
+    if (this->NPUseMenu != nullptr) {
+        this->NPUseMenu->removeAllChildrenWithCleanup(true);
+        this->NPUseMenu->removeFromParentAndCleanup(true);
         this->NPUseMenu = nullptr;
     }
 }
@@ -691,12 +691,59 @@ void InventoryContainer::deleteAllItems(ItemType EItemTypeToDelete){
     }
 }
 
-void InventoryContainer::clearRemoveMenu()
-{
+void InventoryContainer::clearRemoveMenu() const{
     this->CbPEqipment->setSelectedState(false);
     this->CbPConsumable->setSelectedState(false);
     this->CbPTrash->setSelectedState(false);
 
     this->EbPCellNumber->setText("");
     this->EbPItemCount->setText("");
+}
+
+bool InventoryContainer::bIsItemMenuClicked(cocos2d::EventMouse* EInput) const {
+    Node* useButtonNode = this->NPUseMenu->getChildByName("useButton");
+    Node* sellButtonNode = this->NPUseMenu->getChildByName("sellButton");
+    Node* dropButtonNode = this->NPUseMenu->getChildByName("dropButton");
+
+    cocos2d::Vec2 V2MouseLocation = EInput->getLocation();
+    ///Converting mouse location to global world location(Y)
+    V2MouseLocation.y = cocos2d::Director::getInstance()->getWinSize().height - V2MouseLocation.y;
+
+    bool BIsUseButtonClicked = false;
+    bool BIsSellButtonClicked = false;
+    bool BIsDropButtonClicked = false;
+    if (useButtonNode)
+    {
+        cocos2d::Rect RUseButtonNodeLocal = useButtonNode->getBoundingBox();
+        cocos2d::Vec2 V2UseLeftBottomWorldPoint = this->convertToWorldSpace(cocos2d::Vec2(RUseButtonNodeLocal.getMinX(), RUseButtonNodeLocal.getMinY()));
+        ///Convert Rect to world space
+        cocos2d::Rect RUseNodeWorldPosition = cocos2d::Rect(V2UseLeftBottomWorldPoint.x,
+            V2UseLeftBottomWorldPoint.y,
+            useButtonNode->getContentSize().width*useButtonNode->getScaleX(),
+            useButtonNode->getContentSize().height*useButtonNode->getScaleY());
+        BIsUseButtonClicked = RUseNodeWorldPosition.containsPoint(V2MouseLocation);
+    }
+    if (sellButtonNode)
+    {
+        cocos2d::Rect RSellButtonNodeLocal = sellButtonNode->getBoundingBox();
+        cocos2d::Vec2 V2SellLeftBottomWorldPoint = this->convertToWorldSpace(cocos2d::Vec2(RSellButtonNodeLocal.getMinX(), RSellButtonNodeLocal.getMinY()));
+        ///Convert Rect to world space
+        cocos2d::Rect RSellNodeWorldPosition = cocos2d::Rect(V2SellLeftBottomWorldPoint.x,
+            V2SellLeftBottomWorldPoint.y,
+            sellButtonNode->getContentSize().width*sellButtonNode->getScaleX(),
+            sellButtonNode->getContentSize().height*sellButtonNode->getScaleY());
+        BIsSellButtonClicked = RSellNodeWorldPosition.containsPoint(V2MouseLocation);
+    }
+    if (dropButtonNode)
+    {
+        cocos2d::Rect RDropButtonNodeLocal = dropButtonNode->getBoundingBox();
+        cocos2d::Vec2 V2DropLeftBottomWorldPoint = this->convertToWorldSpace(cocos2d::Vec2(RDropButtonNodeLocal.getMinX(), RDropButtonNodeLocal.getMinY()));
+        ///Convert Rect to world space
+        cocos2d::Rect RDropNodeWorldPosition = cocos2d::Rect(V2DropLeftBottomWorldPoint.x,
+            V2DropLeftBottomWorldPoint.y,
+            dropButtonNode->getContentSize().width*dropButtonNode->getScaleX(),
+            dropButtonNode->getContentSize().height*dropButtonNode->getScaleY());
+        BIsDropButtonClicked = RDropNodeWorldPosition.containsPoint(V2MouseLocation);
+    }
+    return !BIsUseButtonClicked && !BIsSellButtonClicked && !BIsDropButtonClicked;
 }
