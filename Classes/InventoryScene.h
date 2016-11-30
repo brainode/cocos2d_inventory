@@ -36,6 +36,9 @@ public:
     void onMouseDown(cocos2d::Event *event);
 
     void update(float) override;
+
+    //Get actions on pressing keys
+    void keyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event *event);
     // implement the "static create()" method manually
     CREATE_FUNC(InventoryScene);
 };

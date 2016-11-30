@@ -34,6 +34,14 @@ void InventoryScene::onMouseDown(cocos2d::Event *event){
     log("X:%f | Y:%f",e->getCurrentTarget()->getAnchorPoint().x,e->getCurrentTarget()->getAnchorPoint().y);
 }
 
+void InventoryScene::keyPressed(EventKeyboard::KeyCode keyCode, Event *event) {
+    switch (keyCode) {
+        case(EventKeyboard::KeyCode::KEY_ESCAPE):
+            exit(0);
+            break;
+    }
+}
+
 // on "init" you need to initialize your instance
 bool InventoryScene::init()
 {
@@ -43,6 +51,12 @@ bool InventoryScene::init()
     {
         return false;
     }
+
+    auto keyEvents = EventListenerKeyboard::create();
+
+    keyEvents->onKeyPressed = CC_CALLBACK_2(InventoryScene::keyPressed, this);
+
+    Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(keyEvents, this);
 
     Cursor = cocos2d::Sprite::createWithSpriteFrameName("cursor");
     Cursor->setAnchorPoint(cocos2d::Vec2(0 , 1));

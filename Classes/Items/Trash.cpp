@@ -25,9 +25,8 @@ cocos2d::Node* Trash::showAvailableActions() {
         sellButton->setTitleText("Sell");
         sellButton->setTitleFontSize(USFontSize);
         sellButton->setScale(FScale);
+        sellButton->setPosition(cocos2d::Vec2(0, 0));
         sellButton->setName("sellButton");
-        /*sellButton->addClickEventListener([this](cocos2d::Ref* sender) {
-        });*/
         NPMenu->addChild(sellButton);
 
         auto dropButton = cocos2d::ui::Button::create("menubutton.png", "menubutton_pressed.png");
@@ -36,8 +35,6 @@ cocos2d::Node* Trash::showAvailableActions() {
         dropButton->setScale(FScale);
         dropButton->setPosition(cocos2d::Vec2(0, -(sellButton->getContentSize().height*FScale)));
         dropButton->setName("dropButton");
-        /*dropButton->addClickEventListener([this](cocos2d::Ref* sender) {
-        });*/
         NPMenu->addChild(dropButton);
     }
     return NPMenu;

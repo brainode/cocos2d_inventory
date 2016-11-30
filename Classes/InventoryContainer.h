@@ -27,7 +27,8 @@ private:
 
     Hero* HePInventoryOwner;
 
-    bool bIsItemMenuClicked(cocos2d::EventMouse* EInput) const;
+    ///added second parameter to 'fix' bug
+    bool bIsItemMenuClicked(cocos2d::EventMouse* EInput,int ICellClicked) const;
     /*
      * Delete item menu
      */

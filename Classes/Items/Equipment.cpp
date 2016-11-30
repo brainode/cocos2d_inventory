@@ -28,10 +28,8 @@ cocos2d::Node* Equipment::showAvailableActions() {
     useButton->setTitleText("Use");
     useButton->setTitleFontSize(USFontSize);
     useButton->setScale(FScale);
+    useButton->setPosition(cocos2d::Vec2(0, 0));
     useButton->setName("useButton");
-    /*useButton->addClickEventListener([this](cocos2d::Ref* sender) {
-        cocos2d::log("Clicked");
-    });*/
     NPMenu->addChild(useButton);
 
     if(this->IQuestID<0)
@@ -42,8 +40,6 @@ cocos2d::Node* Equipment::showAvailableActions() {
         sellButton->setScale(FScale);
         sellButton->setPosition(cocos2d::Vec2(0,-(useButton->getContentSize().height*FScale)));
         sellButton->setName("sellButton");
-        /*sellButton->addClickEventListener([this](cocos2d::Ref* sender) {
-        });*/
         NPMenu->addChild(sellButton);
 
         auto dropButton = cocos2d::ui::Button::create("menubutton.png", "menubutton_pressed.png");
@@ -52,8 +48,6 @@ cocos2d::Node* Equipment::showAvailableActions() {
         dropButton->setScale(FScale);
         dropButton->setPosition(cocos2d::Vec2(0, -(useButton->getContentSize().height*FScale*2)));
         dropButton->setName("dropButton");
-        /*dropButton->addClickEventListener([this](cocos2d::Ref* sender) {
-        });*/
         NPMenu->addChild(dropButton);
     }
     return NPMenu;

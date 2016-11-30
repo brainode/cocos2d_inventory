@@ -99,12 +99,14 @@ void ArmCell::addEvents(){
             else if (this->bCellIsHit(EM) && this->BGrabbedFromCell )
             {
                 HePHero->useEquipment(InventoryScene::IPMovedItem);
+                //todo.Refactor static variable for grubbed items,it must contain count,quest attribute.Also inventory cell must clear immediatly after item was grubbed.
+            //}
+            //else if (this->bCellIsHit(EM) && InventoryScene::IPMovedItem)
+            //{
+            //    HePHero->putItemAtInventory(InventoryScene::IPMovedItem);
+            //    //this->putItemAtInventory(InventoryScene::IPMovedItem);
             }
-            else if (this->bCellIsHit(EM) && InventoryScene::IPMovedItem)
-            {
-                HePHero->putItemAtInventory(InventoryScene::IPMovedItem);
-                //this->putItemAtInventory(InventoryScene::IPMovedItem);
-            }else if(this->BGrabbedFromCell && InventoryScene::IPMovedItem->IQuestID>=0 && IcPInventory && IcPInventory->iCellIsHit(EM) < 0 && !HePHero->bIsArmHitted(EM))
+            else if(this->BGrabbedFromCell && InventoryScene::IPMovedItem && InventoryScene::IPMovedItem->IQuestID>=0 && InventoryScene::IPMovedItem->EItemType == ItemType::EquipmentType && IcPInventory && IcPInventory->iCellIsHit(EM) < 0 && !HePHero->bIsArmHitted(EM))
             {
                 HePHero->putItemAtInventory(InventoryScene::IPMovedItem);
             }
