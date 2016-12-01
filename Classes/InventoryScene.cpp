@@ -2,6 +2,7 @@
 #include "proj.win32/ConsumableFactory.h"
 #include "proj.win32/EquipmentFactory.h"
 #include "SimpleAudioEngine.h"
+#include <proj.win32/TrashFactory.h>
 
 USING_NS_CC;
 
@@ -92,7 +93,7 @@ bool InventoryScene::init()
     Torch->setPosition(getContentSize().width/2-250,getContentSize().height/2);
     addChild(Torch);
 
-    Item* HealtPotion = ConsumableFactory::coPCreateHealtPotion();//new Consumable(1,true,cocos2d::Sprite::createWithSpriteFrameName("health_potion"),35,30,2.5);
+    Item* HealtPotion = ConsumableFactory::coPCreateHealtPotion();
     HealtPotion->setPosition(getContentSize().width/2-150,getContentSize().height/2-150);
     addChild(HealtPotion);
 
@@ -109,21 +110,21 @@ bool InventoryScene::init()
     addChild(HealtPotion4);
 
     ///Custom quest number 5
-    Item* Key = new Trash(1,false,cocos2d::Sprite::createWithSpriteFrameName("key"),20,5);
+    Item* Key = TrashFactory::trPCreateKey();
     Key->setPosition(getContentSize().width/2-150,getContentSize().height/2-250);
     addChild(Key);
     ///Custom quest number 5
-    Item* Key2 = new Trash(1,false,cocos2d::Sprite::createWithSpriteFrameName("key"),20,5);
+    Item* Key2 = TrashFactory::trPCreateKey();
     Key2->setPosition(getContentSize().width/2-150,getContentSize().height/2-250);
     addChild(Key2);
 
     ///Custom quest number 5
-    Item* HornAndHooves = new Trash(2,true,cocos2d::Sprite::createWithSpriteFrameName("horn_and_hooves"),500,5);
+    Item* HornAndHooves = TrashFactory::eqPCreateHornAndHooves();
     HornAndHooves->setPosition(getContentSize().width/2-150,getContentSize().height/2+150);
     addChild(HornAndHooves);
 
     ///Custom quest number 5
-    Item* HornAndHooves2 = new Trash(2,true,cocos2d::Sprite::createWithSpriteFrameName("horn_and_hooves"),500,5);
+    Item* HornAndHooves2 = TrashFactory::eqPCreateHornAndHooves();
     HornAndHooves2->setPosition(getContentSize().width/2-250,getContentSize().height/2+150);
     addChild(HornAndHooves2);
 

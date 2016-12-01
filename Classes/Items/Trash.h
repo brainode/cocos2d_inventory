@@ -10,7 +10,7 @@
 
 class Trash : public Item {
 public:
-    Trash(int IItemIdInput,bool BIsUsedInQuestInput,cocos2d::Sprite* SPItemSpriteInput,float FItemCostInput,int IQuestIDInput=-1);
+    Trash(int IItemIdInput,bool BIsStackableInput,cocos2d::Sprite* SPItemSpriteInput,float FItemCostInput,int IQuestIDInput=-1);
     cocos2d::Node* showAvailableActions() override;
 
     bool doCompare(const Item& ItemRight) override;

@@ -97,6 +97,7 @@ void Hero::useEquipment(Item* ItPEquipment){
             {
                 if(!ArCRightArm.bIsCellEmpty())
                 {
+                    this->unUseEquipment(ArCLeftArm.IPItemInCell);
                     this->putItemAtInventory(ArCLeftArm.IPItemInCell);
                     ArCLeftArm.deleteItemFromCell(ArCLeftArm.IItemCount);
                     ArCLeftArm.putItemAtCell(EqPEqipment);

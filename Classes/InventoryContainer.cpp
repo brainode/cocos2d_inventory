@@ -27,8 +27,8 @@ InventoryContainer::InventoryContainer(Hero* HePInventoryOwnerInput) {
     //X position - left corner of inventory,get from first Cell
     //Y position - y center position of higher cell(last cell) + half cell height + font size correction
     this->LInventoryMessage->setPosition(
-            this->Inventory.at(0).getPosition().x,
-            this->Inventory.at(_INVENTORY_SIZE-1).getPosition().y+this->Inventory.at(_INVENTORY_SIZE-1).SCellBg->getContentSize().height/2+UIFontSize
+            this->Inventory[0].getPosition().x,
+            this->Inventory[_INVENTORY_SIZE-1].getPosition().y+this->Inventory[_INVENTORY_SIZE-1].SCellBg->getContentSize().height/2+UIFontSize
     );
     addChild(this->LInventoryMessage,50);
 
@@ -40,8 +40,8 @@ InventoryContainer::InventoryContainer(Hero* HePInventoryOwnerInput) {
     ButPriceSortButton->setTitleColor(cocos2d::Color3B::BLACK); //WTF?Doesn't work
     ButPriceSortButton->setTitleFontSize(UIFontSize);
     ButPriceSortButton->setPosition(cocos2d::Vec2(
-            this->Inventory.at(0).getPosition().x+this->Inventory[0].SCellBg->getContentSize().width/2,
-            this->Inventory.at(0).getPosition().y-this->Inventory[0].SCellBg->getContentSize().height/2-ButPriceSortButton->getContentSize().height/2
+            this->Inventory[0].getPosition().x+this->Inventory[0].SCellBg->getContentSize().width/2,
+            this->Inventory[0].getPosition().y-this->Inventory[0].SCellBg->getContentSize().height/2-ButPriceSortButton->getContentSize().height/2
     ));
     ButPriceSortButton->addClickEventListener([this](cocos2d::Ref* sender){
         this->sortInventory(ESortType::PRICE);
@@ -53,8 +53,8 @@ InventoryContainer::InventoryContainer(Hero* HePInventoryOwnerInput) {
     ButTypeSortButton->setTitleColor(cocos2d::Color3B::BLACK); //Doesn't work on linux(Maybe when sprite and label debug set to 1)
     ButTypeSortButton->setTitleFontSize(UIFontSize);
     ButTypeSortButton->setPosition(cocos2d::Vec2(
-            this->Inventory.at(_CELL_IN_ROW-1).getPosition().x-this->Inventory[_CELL_IN_ROW-1].SCellBg->getContentSize().width/2,
-            this->Inventory.at(_CELL_IN_ROW-1).getPosition().y-this->Inventory[_CELL_IN_ROW-1].SCellBg->getContentSize().height/2-ButTypeSortButton->getContentSize().height/2
+            this->Inventory[_CELL_IN_ROW-1].getPosition().x-this->Inventory[_CELL_IN_ROW-1].SCellBg->getContentSize().width/2,
+            this->Inventory[_CELL_IN_ROW-1].getPosition().y-this->Inventory[_CELL_IN_ROW-1].SCellBg->getContentSize().height/2-ButTypeSortButton->getContentSize().height/2
     ));
 	ButTypeSortButton->addClickEventListener([this](cocos2d::Ref* sender) {
 		this->sortInventory(ESortType::TYPE);
@@ -297,9 +297,6 @@ int InventoryContainer::iCellIsHit(cocos2d::EventMouse *EInput) {
         ///Convert Rect to world space
         cocos2d::Rect RNodeWorldPosition = cocos2d::Rect(V2LeftBottomWorldPoint.x,V2LeftBottomWorldPoint.y,ItemCell.SCellBg->getContentSize().width,ItemCell.SCellBg->getContentSize().height);
         if(RNodeWorldPosition.containsPoint(V2MouseLocation)){
-#if _DEBUG==1
-			ItemCell.showClickedCell();
-#endif // DEBUG
             return ItemCell.ICellNumber;
         }
     }
@@ -391,11 +388,11 @@ void InventoryContainer::addEvents() {
                 this->addItems(InventoryScene::IPMovedItem, IItemCellUnderMouse);
             }///Cause when just moving item around this cell
             else if (this->ICellForSwap == IItemCellUnderMouse && !BIsEmptyCellFrom) {
-                InventoryScene::IPMovedItem->setPosition(this->convertToWorldSpace(this->Inventory.at(IItemCellUnderMouse).getPosition()));
+                InventoryScene::IPMovedItem->setPosition(this->convertToWorldSpace(this->Inventory[IItemCellUnderMouse].getPosition()));
             }///Case when item moved out from inventory.
-            else if (IItemCellUnderMouse<0 && this->ICellForSwap >= 0 && this->Inventory.at(ICellForSwap).IPItemInCell != nullptr) {
+            else if (IItemCellUnderMouse<0 && this->ICellForSwap >= 0 && this->Inventory[ICellForSwap].IPItemInCell != nullptr) {
                 ///Check that item not quest.
-                if (this->Inventory.at(ICellForSwap).IPItemInCell->IQuestID<0) {
+                if (this->Inventory[ICellForSwap].IPItemInCell->IQuestID<0) {
                     this->putItemOutsideInventory(ICellForSwap, EM);
                 }
                 else if (this->HePInventoryOwner->bIsArmHitted(event) && InventoryScene::IPMovedItem->EItemType == ItemType::EquipmentType) {
@@ -403,7 +400,7 @@ void InventoryContainer::addEvents() {
                 }
                 else
                 {
-                    InventoryScene::IPMovedItem->setPosition(this->convertToWorldSpace(this->Inventory.at(ICellForSwap).getPosition()));
+                    InventoryScene::IPMovedItem->setPosition(this->convertToWorldSpace(this->Inventory[ICellForSwap].getPosition()));
                     this->showMessage(std::string("Quest item can't be removed!"));
                 }
             }
@@ -415,7 +412,7 @@ void InventoryContainer::addEvents() {
 }
 
 void InventoryContainer::addItems(Item* InputItem,unsigned int UICellClicked,unsigned int UIItemCount){
-    InventoryCell& CellToUpdate = this->Inventory.at(UICellClicked);
+    InventoryCell& CellToUpdate = this->Inventory[UICellClicked];
     if(this->bCanBeAdded(InputItem)){
         if(CellToUpdate.IPItemInCell!= nullptr && CellToUpdate.IPItemInCell->BIsStackable && InputItem->BIsStackable && *InputItem == *CellToUpdate.IPItemInCell){
             ///Stack items
@@ -430,7 +427,7 @@ void InventoryContainer::addItems(Item* InputItem,unsigned int UICellClicked,uns
             CellToUpdate.IPItemInCell->setPosition(this->convertToWorldSpace(CellToUpdate.getPosition()));
         }else{
             ///Replace item
-            if(this->Inventory.at(UICellClicked).IPItemInCell->IQuestID>=0)
+            if(this->Inventory[UICellClicked].IPItemInCell->IQuestID>=0)
             {
                 this->putItemOutsideInventory(InputItem, UICellClicked);
                 this->showMessage(std::string("Quest item can't be removed from inventory!"));
@@ -483,8 +480,8 @@ void InventoryContainer::putItemOutsideInventory(Item* IPInputItem, int ICellTo)
     int IFirstCellInRow = ICellTo - ICellTo%_CELL_IN_ROW;
     cocos2d::Vec2 V2PostitionToPlace = this->convertToWorldSpace(
         cocos2d::Vec2(
-            this->Inventory.at(IFirstCellInRow).getPositionX() - this->Inventory.at(IFirstCellInRow).SCellBg->getContentSize().width,
-            this->Inventory.at(IFirstCellInRow).getPositionY()
+            this->Inventory[IFirstCellInRow].getPositionX() - this->Inventory[IFirstCellInRow].SCellBg->getContentSize().width,
+            this->Inventory[IFirstCellInRow].getPositionY()
         )
     );
     IPInputItem->setPosition(V2PostitionToPlace);
@@ -493,16 +490,16 @@ void InventoryContainer::putItemOutsideInventory(Item* IPInputItem, int ICellTo)
 void InventoryContainer::putItemOutsideInventory(int ICellFrom,cocos2d::EventMouse* EInput) {
     if(!this->bIsCellEmpty(ICellFrom))
     {
-        Item* IPItemToPut = this->Inventory.at(ICellFrom).IPItemInCell;
-        int IItemCount = this->Inventory.at(ICellFrom).IItemCount;
+        Item* IPItemToPut = this->Inventory[ICellFrom].IPItemInCell;
+        int IItemCount = this->Inventory[ICellFrom].IItemCount;
         cocos2d::Vec2 V2PostitionToPlace;
         if (EInput == nullptr)
         {
             int IFirstCellInRow = ICellFrom - ICellFrom%_CELL_IN_ROW;
             V2PostitionToPlace = this->convertToWorldSpace(
                 cocos2d::Vec2(
-                    this->Inventory.at(IFirstCellInRow).getPositionX() - this->Inventory.at(IFirstCellInRow).SCellBg->getContentSize().width,
-                    this->Inventory.at(IFirstCellInRow).getPositionY()
+                    this->Inventory[IFirstCellInRow].getPositionX() - this->Inventory[IFirstCellInRow].SCellBg->getContentSize().width,
+                    this->Inventory[IFirstCellInRow].getPositionY()
                 )
             );
         }
@@ -549,7 +546,6 @@ void InventoryContainer::swapCells(unsigned int UICellFrom,unsigned int UICellTo
 
 void InventoryContainer::clearCell(unsigned int UICellToClear)
 {
-    //this->Inventory[UICellToClear]
 	this->Inventory[UICellToClear] = InventoryCell();
 }
 
@@ -559,14 +555,14 @@ void InventoryContainer::groupAllStackableItems()
     {
         if(!this->bIsCellEmpty(ICellIterator))
         {
-            Item* ItemToStack = this->Inventory.at(ICellIterator).IPItemInCell;
+            Item* ItemToStack = this->Inventory[ICellIterator].IPItemInCell;
             for(int ICellIteratorToStack = ICellIterator+1;ICellIteratorToStack<_INVENTORY_SIZE;++ICellIteratorToStack)
             {
                 if(!this->bIsCellEmpty(ICellIteratorToStack))
                 {
-                    if(*ItemToStack == *this->Inventory.at(ICellIteratorToStack).IPItemInCell)
+                    if(*ItemToStack == *this->Inventory[ICellIteratorToStack].IPItemInCell)
                     {
-                        this->addItems(this->Inventory.at(ICellIteratorToStack).IPItemInCell, ICellIterator, this->Inventory.at(ICellIteratorToStack).IItemCount);
+                        this->addItems(this->Inventory[ICellIteratorToStack].IPItemInCell, ICellIterator, this->Inventory[ICellIteratorToStack].IItemCount);
                         this->clearCell(ICellIteratorToStack);
                     }
                 }
@@ -635,7 +631,7 @@ bool InventoryContainer::bCanBeAdded(Item* InputItem){
 }
 
 void InventoryContainer::updateCellCounter(unsigned int UICellToUpdate){
-	this->Inventory.at(UICellToUpdate).updateLabels();
+	this->Inventory[UICellToUpdate].updateLabels();
 }
 
 void InventoryContainer::showMessage(std::string messageText){

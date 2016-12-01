@@ -159,6 +159,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="EquipmentFactory.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Parameters.cpp" />
+    <ClCompile Include="TrashFactory.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Classes\Actors\ArmCell.h" />
@@ -176,6 +177,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="EquipmentFactory.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="Parameters.h" />
+    <ClInclude Include="TrashFactory.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\cocos2d\cocos\2d\libcocos2d.vcxproj">
