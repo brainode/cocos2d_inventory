@@ -734,8 +734,8 @@ bool InventoryContainer::bIsItemMenuClicked(cocos2d::EventMouse* EInput, int ICe
             cocos2d::Rect RSellButtonNodeLocal = sellButtonNode->getBoundingBox();
             cocos2d::Vec2 V2SellLeftBottomWorldPoint = this->convertToWorldSpace(cocos2d::Vec2(RSellButtonNodeLocal.getMinX(), RSellButtonNodeLocal.getMinY()));
             ///Convert Rect to world space
-            cocos2d::Rect RSellNodeWorldPosition = cocos2d::Rect(V2SellLeftBottomWorldPoint.x,
-                V2SellLeftBottomWorldPoint.y,
+            cocos2d::Rect RSellNodeWorldPosition = cocos2d::Rect(V2SellLeftBottomWorldPoint.x + ICellClicked%_CELL_IN_ROW*fixWidth,
+                V2SellLeftBottomWorldPoint.y + ICellClicked / _CELL_IN_ROW*fixHeight,
                 sellButtonNode->getContentSize().width*sellButtonNode->getScaleX(),
                 sellButtonNode->getContentSize().height*sellButtonNode->getScaleY());
             BIsSellButtonClicked = RSellNodeWorldPosition.containsPoint(V2MouseLocation);
@@ -745,8 +745,8 @@ bool InventoryContainer::bIsItemMenuClicked(cocos2d::EventMouse* EInput, int ICe
             cocos2d::Rect RDropButtonNodeLocal = dropButtonNode->getBoundingBox();
             cocos2d::Vec2 V2DropLeftBottomWorldPoint = this->convertToWorldSpace(cocos2d::Vec2(RDropButtonNodeLocal.getMinX(), RDropButtonNodeLocal.getMinY()));
             ///Convert Rect to world space
-            cocos2d::Rect RDropNodeWorldPosition = cocos2d::Rect(V2DropLeftBottomWorldPoint.x,
-                V2DropLeftBottomWorldPoint.y,
+            cocos2d::Rect RDropNodeWorldPosition = cocos2d::Rect(V2DropLeftBottomWorldPoint.x + ICellClicked%_CELL_IN_ROW*fixWidth,
+                V2DropLeftBottomWorldPoint.y + ICellClicked / _CELL_IN_ROW*fixHeight,
                 dropButtonNode->getContentSize().width*dropButtonNode->getScaleX(),
                 dropButtonNode->getContentSize().height*dropButtonNode->getScaleY());
             BIsDropButtonClicked = RDropNodeWorldPosition.containsPoint(V2MouseLocation);

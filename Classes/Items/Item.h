@@ -4,7 +4,7 @@
 
 #ifndef MYGAME_ITEM_H
 #define MYGAME_ITEM_H
-#define _DEBUG 1
+
 
 
 #include "cocos2d.h"
@@ -21,9 +21,7 @@ public:
 	int IItemID;
 
     cocos2d::Sprite* SPItemSprite;
-#if _DEBUG==1
-	cocos2d::Label* Grubbed;
-#endif // DEBUG
+
     float FItemCost;
 
     bool BIsGrabByUser;

@@ -44,9 +44,6 @@ public:
 
     ~ArmCell();
 
-#if _DEBUG==1
-    void showClickedCell();
-#endif // DEBUG
 
 };
 

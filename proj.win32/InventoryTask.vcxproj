@@ -174,8 +174,6 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\Items\Trash.h" />
     <ClInclude Include="ConsumableFactory.h" />
     <ClInclude Include="EquipmentFactory.h" />
-    <ClInclude Include="HeathAction.h" />
-    <ClInclude Include="HeroActions.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="Parameters.h" />
   </ItemGroup>

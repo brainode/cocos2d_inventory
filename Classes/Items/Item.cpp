@@ -18,13 +18,6 @@ Item::Item(int IItemIDInput,bool BIsStackableInput,cocos2d::Sprite* SPItemSprite
     this->SPItemSprite= SPItemSpriteInput;
     addChild(this->SPItemSprite);
 
-#if _DEBUG==1
-	this->Grubbed = cocos2d::Label::createWithTTF("false", "fonts/Marker Felt.ttf", 24);
-	this->Grubbed->setColor(cocos2d::Color3B::RED);
-	this->Grubbed->setPosition(cocos2d::Vec2(0, -50));
-	addChild(this->Grubbed);
-#endif // DEBUG
-
     this->FItemCost = FItemCostInput;
 
     this->BIsGrabByUser = false;
@@ -48,13 +41,6 @@ Item::Item(const Item& ItemInput){
 	
     addChild(this->SPItemSprite);
 
-#if _DEBUG==1
-	this->Grubbed = cocos2d::Label::createWithTTF("false", "fonts/Marker Felt.ttf", 24);
-	this->Grubbed->setColor(cocos2d::Color3B::RED);
-	this->Grubbed->setPosition(cocos2d::Vec2(0, -50));
-	addChild(this->Grubbed);
-#endif // DEBUG
-
     this->FItemCost = ItemInput.FItemCost;
 
     this->BIsGrabByUser = false;
@@ -71,13 +57,6 @@ Item::~Item() {
     this->removeAllChildrenWithCleanup(true);
 }
 
-//void Item::hideAvailableActions()const{
-//    cocos2d::Node* NPActionButton;
-//    while((NPActionButton=this->getChildByName("actionButton"))!=nullptr)
-//    {
-//        NPActionButton->removeFromParentAndCleanup(true);
-//    }
-//}
 
 bool Item::BIsHit(cocos2d::EventMouse *EInput) {
     cocos2d::Vec2 V2MouseLocation = EInput->getLocation();
@@ -90,9 +69,6 @@ bool Item::BIsHit(cocos2d::EventMouse *EInput) {
     ///Convert Rect to world space
     //fixme.Bounding box has problem with resizing
     cocos2d::Rect RSpriteWorldPosition = cocos2d::Rect(V2LeftBottomWorldPoint.x,V2LeftBottomWorldPoint.y,this->SPItemSprite->getContentSize().width,this->SPItemSprite->getContentSize().height/2);
-//    cocos2d::log("Scale X:%f Scale Y:%f",this->getScaleX(),this->getScaleY());
-//    cocos2d::log("Mouse X:%f Mouse Y:%f",V2MouseLocation.x,V2MouseLocation.y);
-//    cocos2d::log("Item Xmin:%f Item Ymin:%f Item Xmax:%f Item Ymax:%f",RSpriteWorldPosition.getMinX(),RSpriteWorldPosition.getMinY(),RSpriteWorldPosition.getMaxX(),RSpriteWorldPosition.getMaxY());
     return RSpriteWorldPosition.containsPoint(V2MouseLocation);
 }
 
@@ -102,10 +78,6 @@ void Item::addEvents() {
         cocos2d::EventMouse* EM = (cocos2d::EventMouse*)event;
         if(this->BIsHit(EM) && EM->getMouseButton()==MOUSE_BUTTON_LEFT){
             this->BIsGrabByUser = true;
-#if _DEBUG==1
-			this->Grubbed->setString("true");
-			this->Grubbed->setColor(cocos2d::Color3B::GREEN);
-#endif // DEBUG
             InventoryScene::IPMovedItem = this;
         }
     };
@@ -121,10 +93,6 @@ void Item::addEvents() {
     listener->onMouseUp = [this](cocos2d::Event* event){
 		cocos2d::EventMouse* EM = (cocos2d::EventMouse*)event;
 		if (this->BIsGrabByUser && EM->getMouseButton() == MOUSE_BUTTON_LEFT) {
-#if _DEBUG==1
-			this->Grubbed->setString("false");
-			this->Grubbed->setColor(cocos2d::Color3B::RED);
-#endif // DEBUG
 			this->BIsGrabByUser = false;
 		}
     };

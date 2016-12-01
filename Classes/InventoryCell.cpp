@@ -117,10 +117,3 @@ void InventoryCell::clearCell(){
     this->updateLabels();
 }
 
-#if _DEBUG==1
-void InventoryCell::showClickedCell() {
-	auto fadeIn = cocos2d::FadeIn::create(0.25f);
-	auto fadeOut = cocos2d::FadeOut::create(0.25f);
-	this->SCellBg->runAction(cocos2d::Sequence::create(fadeOut,fadeIn,nullptr ));
-}
-#endif // DEBUG

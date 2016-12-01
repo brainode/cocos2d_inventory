@@ -42,9 +42,6 @@ public:
 
     ~Cell();
 
-#if _DEBUG==1
-	void showClickedCell();
-#endif // DEBUG
 };
 
 

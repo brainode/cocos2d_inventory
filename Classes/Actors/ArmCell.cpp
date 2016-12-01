@@ -128,9 +128,6 @@ bool ArmCell::bCellIsHit(cocos2d::EventMouse* EInput){
     ///Convert Rect to world space
     cocos2d::Rect RNodeWorldPosition = cocos2d::Rect(V2LeftBottomWorldPoint.x, V2LeftBottomWorldPoint.y, this->SCellBg->getContentSize().width, this->SCellBg->getContentSize().height);
     if (RNodeWorldPosition.containsPoint(V2MouseLocation)) {
-#if _DEBUG==1
-        this->showClickedCell();
-#endif // DEBUG
         return true;
     }
     return false;
@@ -159,10 +156,3 @@ void ArmCell::clearCell() {
     this->IItemCount -= 1;
 }
 
-#if _DEBUG==1
-void ArmCell::showClickedCell() {
-    auto fadeIn = cocos2d::FadeIn::create(0.25f);
-    auto fadeOut = cocos2d::FadeOut::create(0.25f);
-    this->SCellBg->runAction(cocos2d::Sequence::create(fadeOut, fadeIn, nullptr));
-}
-#endif // DEBUG

@@ -92,12 +92,6 @@
     <ClInclude Include="..\Classes\Actors\Hero.h">
       <Filter>src\Actors</Filter>
     </ClInclude>
-    <ClInclude Include="HeroActions.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="HeathAction.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\Cell.h">
       <Filter>src</Filter>
     </ClInclude>
