@@ -28,11 +28,6 @@ public:
     */
     bool bCellIsHit(cocos2d::EventMouse* EInput);
 
-    ///*
-    // * Show menu,that containt available actions for the Item
-    // */
-    void showActionMenu();
-
     /*
     * Link item at cell,move at cell's center point
     */

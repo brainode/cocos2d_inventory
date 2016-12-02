@@ -152,14 +152,14 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\InventoryScene.cpp" />
     <ClCompile Include="..\Classes\InventoryCell.cpp" />
     <ClCompile Include="..\Classes\Items\Consumable.cpp" />
+    <ClCompile Include="..\Classes\Items\ConsumableFactory.cpp" />
     <ClCompile Include="..\Classes\Items\Equipment.cpp" />
+    <ClCompile Include="..\Classes\Items\EquipmentFactory.cpp" />
     <ClCompile Include="..\Classes\Items\Item.cpp" />
     <ClCompile Include="..\Classes\Items\Trash.cpp" />
-    <ClCompile Include="ConsumableFactory.cpp" />
-    <ClCompile Include="EquipmentFactory.cpp" />
+    <ClCompile Include="..\Classes\Items\TrashFactory.cpp" />
+    <ClCompile Include="..\Classes\Parameters.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Parameters.cpp" />
-    <ClCompile Include="TrashFactory.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Classes\Actors\ArmCell.h" />
@@ -170,14 +170,14 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\InventoryScene.h" />
     <ClInclude Include="..\Classes\InventoryCell.h" />
     <ClInclude Include="..\Classes\Items\Consumable.h" />
+    <ClInclude Include="..\Classes\Items\ConsumableFactory.h" />
     <ClInclude Include="..\Classes\Items\Equipment.h" />
+    <ClInclude Include="..\Classes\Items\EquipmentFactory.h" />
     <ClInclude Include="..\Classes\Items\Item.h" />
     <ClInclude Include="..\Classes\Items\Trash.h" />
-    <ClInclude Include="ConsumableFactory.h" />
-    <ClInclude Include="EquipmentFactory.h" />
+    <ClInclude Include="..\Classes\Items\TrashFactory.h" />
+    <ClInclude Include="..\Classes\Parameters.h" />
     <ClInclude Include="main.h" />
-    <ClInclude Include="Parameters.h" />
-    <ClInclude Include="TrashFactory.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\cocos2d\cocos\2d\libcocos2d.vcxproj">

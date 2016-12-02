@@ -8,7 +8,7 @@
 #include "ArmCell.h"
 #include "Items/Item.h"
 //fixme.Change file position
-#include <proj.win32/Parameters.h>
+#include <Parameters.h>
 
 class Hero : public cocos2d::Node {
 private:

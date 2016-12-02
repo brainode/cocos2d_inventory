@@ -45,7 +45,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     // Hide standart cursor
     glview->setCursorVisible(false);
     // turn on display FPS
-    director->setDisplayStats(true);
+    director->setDisplayStats(false);
 
     // set FPS. the default value is 1.0/60 if you don't call this
     director->setAnimationInterval(1.0f / 60);

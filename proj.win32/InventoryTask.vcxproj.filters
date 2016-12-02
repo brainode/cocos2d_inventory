@@ -54,16 +54,16 @@
     <ClCompile Include="..\Classes\Items\Item.cpp">
       <Filter>src\Items</Filter>
     </ClCompile>
-    <ClCompile Include="Parameters.cpp">
+    <ClCompile Include="..\Classes\Parameters.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="ConsumableFactory.cpp">
+    <ClCompile Include="..\Classes\Items\ConsumableFactory.cpp">
       <Filter>src\Items</Filter>
     </ClCompile>
-    <ClCompile Include="EquipmentFactory.cpp">
+    <ClCompile Include="..\Classes\Items\EquipmentFactory.cpp">
       <Filter>src\Items</Filter>
     </ClCompile>
-    <ClCompile Include="TrashFactory.cpp">
+    <ClCompile Include="..\Classes\Items\TrashFactory.cpp">
       <Filter>src\Items</Filter>
     </ClCompile>
   </ItemGroup>
@@ -104,16 +104,16 @@
     <ClInclude Include="..\Classes\Items\Item.h">
       <Filter>src\Items</Filter>
     </ClInclude>
-    <ClInclude Include="Parameters.h">
+    <ClInclude Include="..\Classes\Parameters.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="ConsumableFactory.h">
+    <ClInclude Include="..\Classes\Items\ConsumableFactory.h">
       <Filter>src\Items</Filter>
     </ClInclude>
-    <ClInclude Include="EquipmentFactory.h">
+    <ClInclude Include="..\Classes\Items\EquipmentFactory.h">
       <Filter>src\Items</Filter>
     </ClInclude>
-    <ClInclude Include="TrashFactory.h">
+    <ClInclude Include="..\Classes\Items\TrashFactory.h">
       <Filter>src\Items</Filter>
     </ClInclude>
   </ItemGroup>

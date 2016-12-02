@@ -1,8 +1,8 @@
 #include "InventoryScene.h"
-#include "proj.win32/ConsumableFactory.h"
-#include "proj.win32/EquipmentFactory.h"
+#include "Items/ConsumableFactory.h"
+#include "Items/EquipmentFactory.h"
 #include "SimpleAudioEngine.h"
-#include <proj.win32/TrashFactory.h>
+#include <Items/TrashFactory.h>
 
 USING_NS_CC;
 

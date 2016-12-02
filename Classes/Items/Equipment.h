@@ -7,7 +7,7 @@
 
 #include "Item.h"
 //fixme.Change file position
-#include <proj.win32/Parameters.h>
+#include <Parameters.h>
 
 class Equipment : public Item{
 public:

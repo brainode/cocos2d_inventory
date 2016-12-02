@@ -2,7 +2,7 @@
 // Created by rusbaron on 10/5/16.
 //
 #include "InventoryScene.h"
-
+#include "SimpleAudioEngine.h"
 #include <iostream>
 
 InventoryContainer::InventoryContainer(Hero* HePInventoryOwnerInput) {
