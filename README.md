@@ -2,6 +2,8 @@
 
 This is implementation of test task.
 
+![Screenshot of inventory](http://i.imgur.com/bYeNNBL.png)
+
 ###Iventory task
 1. Inventory properties
   * Has 16 cells
@@ -33,14 +35,14 @@ This is implementation of test task.
 
 ##Release items
 * Health potion - consumable
-![Health potion](http://imgur.com/Z3aJYAb)
+![Health potion](http://i.imgur.com/Z3aJYAb.png)
 * Speed potion - consumable
-![Speed potion](http://imgur.com/z2Z19w1)
+![Speed potion](http://i.imgur.com/z2Z19w1.png)
 * Sword - equipment
-![Sword](http://imgur.com/IpHz966)
+![Sword](http://i.imgur.com/IpHz966.png)
 * Horn and Hoovies - trash
-![Horn and Hoovies](http://imgur.com/A9T6liV)
+![Horn and Hoovies](http://i.imgur.com/A9T6liV.png)
 * Key - quest trash
-![Key](http://imgur.com/NDhIzAA)
+![Key](http://i.imgur.com/NDhIzAA.png)
 * Torch - quest equipment
-![Torch](http://imgur.com/FMIUIAA)
+![Torch](http://i.imgur.com/FMIUIAA.png)

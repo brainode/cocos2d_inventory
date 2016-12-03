@@ -66,6 +66,9 @@
     <ClCompile Include="..\Classes\Items\TrashFactory.cpp">
       <Filter>src\Items</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\PriceMenu.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -115,6 +118,9 @@
     </ClInclude>
     <ClInclude Include="..\Classes\Items\TrashFactory.h">
       <Filter>src\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PriceMenu.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

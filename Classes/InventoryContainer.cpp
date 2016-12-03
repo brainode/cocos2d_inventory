@@ -361,7 +361,7 @@ void InventoryContainer::addEvents() {
                 if (dropButton)
                 {
                     dropButton->addClickEventListener([this, ICellHit](cocos2d::Ref* sender) {
-                        this->deleteItems(ICellHit, Inventory[ICellHit].IItemCount);
+                        this->putItemOutsideInventory(ICellHit);
                         this->clearUseMenu();
                     });
                 }
