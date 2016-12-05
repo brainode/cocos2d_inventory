@@ -46,3 +46,6 @@ This is implementation of test task.
 ![Key](http://i.imgur.com/NDhIzAA.png)
 * Torch - quest equipment
 ![Torch](http://i.imgur.com/FMIUIAA.png)
+
+Currient build works on Windows, just open InventoryTask.sln in proj.win32 folder and click build.Tested with Visual Studio 2015.
+Worked build version is InventoryTask.7z in the root folder. To run it,need to install C++ Redistributable 2013,wich placed in **Dependency** folder.
