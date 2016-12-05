@@ -3,6 +3,8 @@
 //
 #include "InventoryScene.h"
 #include "SimpleAudioEngine.h"
+#include "PriceMenu.h"
+
 #include <iostream>
 
 InventoryContainer::InventoryContainer(Hero* HePInventoryOwnerInput) {
@@ -20,6 +22,11 @@ InventoryContainer::InventoryContainer(Hero* HePInventoryOwnerInput) {
     this->ICellForSwap = -1;
 
     this->NPUseMenu = nullptr;
+
+    this->NPSellMenu = new PriceMenu();
+
+    auto sellMenu = static_cast<PriceMenu*>(this->NPSellMenu);
+    sellMenu->hidePriceMenu();
 
     unsigned int UIFontSize = 24;
     
@@ -173,7 +180,7 @@ InventoryContainer::InventoryContainer(Hero* HePInventoryOwnerInput) {
     this->EbPCellNumber->setInputMode(cocos2d::ui::EditBox::InputMode::NUMERIC);
     this->EbPCellNumber->setMaxLength(UIMaxLenght);
     this->EbPCellNumber->setFontSize(UIFontSizeRemoveMenu);
-    this->EbPCellNumber->setPlaceHolder("Type cell noumber");
+    this->EbPCellNumber->setPlaceHolder("Type cell number");
     this->EbPCellNumber->setPlaceholderFontSize(UIFontSizeRemoveMenu);
 
     addChild(this->EbPItemCount);
@@ -310,7 +317,7 @@ void InventoryContainer::addEvents() {
         //this->clearUseMenu();
 		if (EM->getMouseButton() == MOUSE_BUTTON_LEFT) {
             this->ICellForSwap = this->iCellIsHit(EM);
-            if (this->NPUseMenu && this->bIsItemMenuClicked(EM,this->ICellForSwap))
+            if (this->NPUseMenu && this->bIsItemMenuClicked(EM))
             {
                 this->clearUseMenu();
             }
@@ -328,6 +335,7 @@ void InventoryContainer::addEvents() {
             if(ICellHit>=0 && !this->bIsCellEmpty(ICellHit))
             {
                 this->NPUseMenu = Inventory[ICellHit].IPItemInCell->showAvailableActions();
+                this->ICellWithMenu = ICellHit;
                 Node* useButtonNode = this->NPUseMenu->getChildByName("useButton");
                 auto useButton = static_cast<cocos2d::ui::Button*>(useButtonNode);
                 if(useButton)
@@ -350,9 +358,16 @@ void InventoryContainer::addEvents() {
                 auto sellButton = static_cast<cocos2d::ui::Button*>(sellButtonNode);
                 if (sellButton)
                 {
+                    this->NPSellMenu->setPosition(
+                        this->convertToWorldSpace(Inventory[ICellHit].getPosition())
+                    );
+                    if(!this->getChildByName("PriceMenu"))
+                    {
+                        this->getParent()->addChild(this->NPSellMenu, 999);
+                    }
                     sellButton->addClickEventListener([this, ICellHit](cocos2d::Ref* sender) {
-                        this->HePInventoryOwner->addMoneyToPurse(Inventory[ICellHit].ICellCost);
-                        this->deleteItems(ICellHit, Inventory[ICellHit].IItemCount);
+                        auto sellMenu = static_cast<PriceMenu*>(this->NPSellMenu);
+                        sellMenu->showPriceMenu(ICellHit,this,this->HePInventoryOwner);
                         this->clearUseMenu();
                     });
                 }
@@ -649,6 +664,7 @@ void InventoryContainer::clearUseMenu(){
         this->NPUseMenu->removeAllChildrenWithCleanup(true);
         this->NPUseMenu->removeFromParentAndCleanup(true);
         this->NPUseMenu = nullptr;
+        this->ICellWithMenu = -1;
     }
 }
 
@@ -695,11 +711,11 @@ void InventoryContainer::clearRemoveMenu() const{
     this->EbPItemCount->setText("");
 }
 
-bool InventoryContainer::bIsItemMenuClicked(cocos2d::EventMouse* EInput, int ICellClicked) const {
-    if(ICellClicked>=0)
+bool InventoryContainer::bIsItemMenuClicked(cocos2d::EventMouse* EInput) const {
+    if(this->ICellWithMenu>=0)
     {
-        int fixWidth = this->Inventory[ICellClicked].SCellBg->getContentSize().width;
-        int fixHeight = this->Inventory[ICellClicked].SCellBg->getContentSize().height;
+        int fixWidth = this->Inventory[this->ICellWithMenu].SCellBg->getContentSize().width;
+        int fixHeight = this->Inventory[this->ICellWithMenu].SCellBg->getContentSize().height;
 
 
         Node* useButtonNode = this->NPUseMenu->getChildByName("useButton");
@@ -713,16 +729,19 @@ bool InventoryContainer::bIsItemMenuClicked(cocos2d::EventMouse* EInput, int ICe
         bool BIsUseButtonClicked = false;
         bool BIsSellButtonClicked = false;
         bool BIsDropButtonClicked = false;
+        float test1, test2;
         if (useButtonNode)
         {
             cocos2d::Rect RUseButtonNodeLocal = useButtonNode->getBoundingBox();
             cocos2d::Vec2 V2UseLeftBottomWorldPoint = this->convertToWorldSpace(cocos2d::Vec2(RUseButtonNodeLocal.getMinX(),
                 RUseButtonNodeLocal.getMinY()));
             ///Convert Rect to world space
-            cocos2d::Rect RUseNodeWorldPosition = cocos2d::Rect(V2UseLeftBottomWorldPoint.x + ICellClicked%_CELL_IN_ROW*fixWidth,
-                V2UseLeftBottomWorldPoint.y + ICellClicked/_CELL_IN_ROW*fixHeight,
+            cocos2d::Rect RUseNodeWorldPosition = cocos2d::Rect(V2UseLeftBottomWorldPoint.x + this->ICellWithMenu%_CELL_IN_ROW*fixWidth,
+                V2UseLeftBottomWorldPoint.y + this->ICellWithMenu /_CELL_IN_ROW*fixHeight,
                 useButtonNode->getContentSize().width*useButtonNode->getScaleX(),
                 useButtonNode->getContentSize().height*useButtonNode->getScaleY());
+            test1 = useButtonNode->getContentSize().width*useButtonNode->getScaleX();
+            test2 = useButtonNode->getContentSize().height*useButtonNode->getScaleY();
             BIsUseButtonClicked = RUseNodeWorldPosition.containsPoint(V2MouseLocation);
         }
         if (sellButtonNode)
@@ -730,8 +749,8 @@ bool InventoryContainer::bIsItemMenuClicked(cocos2d::EventMouse* EInput, int ICe
             cocos2d::Rect RSellButtonNodeLocal = sellButtonNode->getBoundingBox();
             cocos2d::Vec2 V2SellLeftBottomWorldPoint = this->convertToWorldSpace(cocos2d::Vec2(RSellButtonNodeLocal.getMinX(), RSellButtonNodeLocal.getMinY()));
             ///Convert Rect to world space
-            cocos2d::Rect RSellNodeWorldPosition = cocos2d::Rect(V2SellLeftBottomWorldPoint.x + ICellClicked%_CELL_IN_ROW*fixWidth,
-                V2SellLeftBottomWorldPoint.y + ICellClicked / _CELL_IN_ROW*fixHeight,
+            cocos2d::Rect RSellNodeWorldPosition = cocos2d::Rect(V2SellLeftBottomWorldPoint.x + this->ICellWithMenu%_CELL_IN_ROW*fixWidth,
+                V2SellLeftBottomWorldPoint.y + this->ICellWithMenu / _CELL_IN_ROW*fixHeight,
                 sellButtonNode->getContentSize().width*sellButtonNode->getScaleX(),
                 sellButtonNode->getContentSize().height*sellButtonNode->getScaleY());
             BIsSellButtonClicked = RSellNodeWorldPosition.containsPoint(V2MouseLocation);
@@ -741,8 +760,8 @@ bool InventoryContainer::bIsItemMenuClicked(cocos2d::EventMouse* EInput, int ICe
             cocos2d::Rect RDropButtonNodeLocal = dropButtonNode->getBoundingBox();
             cocos2d::Vec2 V2DropLeftBottomWorldPoint = this->convertToWorldSpace(cocos2d::Vec2(RDropButtonNodeLocal.getMinX(), RDropButtonNodeLocal.getMinY()));
             ///Convert Rect to world space
-            cocos2d::Rect RDropNodeWorldPosition = cocos2d::Rect(V2DropLeftBottomWorldPoint.x + ICellClicked%_CELL_IN_ROW*fixWidth,
-                V2DropLeftBottomWorldPoint.y + ICellClicked / _CELL_IN_ROW*fixHeight,
+            cocos2d::Rect RDropNodeWorldPosition = cocos2d::Rect(V2DropLeftBottomWorldPoint.x + this->ICellWithMenu%_CELL_IN_ROW*fixWidth,
+                V2DropLeftBottomWorldPoint.y + this->ICellWithMenu / _CELL_IN_ROW*fixHeight,
                 dropButtonNode->getContentSize().width*dropButtonNode->getScaleX(),
                 dropButtonNode->getContentSize().height*dropButtonNode->getScaleY());
             BIsDropButtonClicked = RDropNodeWorldPosition.containsPoint(V2MouseLocation);

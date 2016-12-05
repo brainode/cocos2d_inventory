@@ -14,6 +14,7 @@
 #include "ui/CocosGUI.h"
 #include "InventoryCell.h"
 
+
 enum ESortType{PRICE,TYPE};
 
 class InventoryContainer : public cocos2d::Node {
@@ -22,13 +23,17 @@ private:
 
     cocos2d::Node* NPUseMenu;
 
+    cocos2d::Node* NPSellMenu;
+
     cocos2d::ui::CheckBox *CbPEqipment, *CbPConsumable, *CbPTrash;
     cocos2d::ui::EditBox *EbPCellNumber, *EbPItemCount;
 
     Hero* HePInventoryOwner;
 
+    int ICellWithMenu;
+
     ///added second parameter to 'fix' bug
-    bool bIsItemMenuClicked(cocos2d::EventMouse* EInput,int ICellClicked) const;
+    bool bIsItemMenuClicked(cocos2d::EventMouse* EInput) const;
     /*
      * Delete item menu
      */

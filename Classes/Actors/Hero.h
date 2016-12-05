@@ -31,17 +31,36 @@ public:
 
     void setInventory(void* pInventory);
 
+    /*
+     *
+     */
     void useConsumable(Item* ItPConsumable);
     
+    /*
+     *
+     */
     void useEquipment(Item* ItPEquipment);
 
+    /*
+     *
+     */
     void unUseEquipment(Item* ItPEquipment);
 
+    /*
+     *
+     */
     void putItemAtInventory(Item* ItPEquipment);
 
+    /*
+     *
+     */
     void addMoneyToPurse(unsigned int UIMoneyToAdd);
 
+    /*
+     *
+     */
     bool bIsArmHitted(cocos2d::Event* event);
+
 };
 
 

@@ -113,7 +113,7 @@ void ArmCell::addEvents(){
             this->BGrabbedFromCell = false;
         }
     };
-    cocos2d::Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(listener, 30);
+    cocos2d::Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(listener, 25);
 }
 //bug.Resizing not affect on BoundingBox
 bool ArmCell::bCellIsHit(cocos2d::EventMouse* EInput){
