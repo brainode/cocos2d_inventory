@@ -14,7 +14,7 @@ public:
         *4.Object price(int)
         *5.Quest id(int),not mandatory parameter
         */
-        Trash* eqPSword = new Trash(2, true, cocos2d::Sprite::createWithSpriteFrameName("horn_and_hooves"), 500, 5);
+        Trash* eqPSword = new Trash(2, true, cocos2d::Sprite::createWithSpriteFrameName("horn_and_hooves"), 500);
         return eqPSword;
     }
     static Trash* trPCreateKey()
