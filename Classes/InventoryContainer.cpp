@@ -315,7 +315,7 @@ void InventoryContainer::addEvents() {
     listener->onMouseDown = [this](cocos2d::Event* event){
         cocos2d::EventMouse* EM = static_cast<cocos2d::EventMouse*>(event);
         //this->clearUseMenu();
-		if (EM->getMouseButton() == MOUSE_BUTTON_LEFT) {
+		if (EM->getMouseButton() == cocos2d::EventMouse::MouseButton::BUTTON_LEFT) {
             this->ICellForSwap = this->iCellIsHit(EM);
             if (this->NPUseMenu && this->bIsItemMenuClicked(EM))
             {
@@ -328,7 +328,7 @@ void InventoryContainer::addEvents() {
 					//cocos2d::log("Item from Cell:%i was grabbed with quantity %i", ICellForSwap, this->Inventory.at(ICellForSwap).IItemCount);
 				}
 			}
-        }else if(EM->getMouseButton() == MOUSE_BUTTON_RIGHT)
+        }else if(EM->getMouseButton() == cocos2d::EventMouse::MouseButton::BUTTON_RIGHT)
         {
             int ICellHit = this->iCellIsHit(EM);
             this->clearUseMenu();
@@ -393,7 +393,7 @@ void InventoryContainer::addEvents() {
         cocos2d::EventMouse* EM = static_cast<cocos2d::EventMouse*>(event);
         int IItemCellUnderMouse = this->iCellIsHit(EM);
         bool BIsEmptyCellFrom = this->bIsCellEmpty(this->ICellForSwap);
-        if(EM->getMouseButton() == MOUSE_BUTTON_LEFT)
+        if(EM->getMouseButton() == cocos2d::EventMouse::MouseButton::BUTTON_LEFT)
         {
             ///Check if Cell was grabbed
             if (this->ICellForSwap != IItemCellUnderMouse && !BIsEmptyCellFrom && IItemCellUnderMouse >= 0) {

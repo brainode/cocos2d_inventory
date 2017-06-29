@@ -76,7 +76,7 @@ void Item::addEvents() {
     auto listener = cocos2d::EventListenerMouse::create();
     listener->onMouseDown = [this](cocos2d::Event* event){
         cocos2d::EventMouse* EM = (cocos2d::EventMouse*)event;
-        if(this->BIsHit(EM) && EM->getMouseButton()==MOUSE_BUTTON_LEFT){
+        if(this->BIsHit(EM) && EM->getMouseButton() == cocos2d::EventMouse::MouseButton::BUTTON_LEFT){
             this->BIsGrabByUser = true;
             InventoryScene::IPMovedItem = this;
         }
@@ -92,7 +92,7 @@ void Item::addEvents() {
     };
     listener->onMouseUp = [this](cocos2d::Event* event){
 		cocos2d::EventMouse* EM = (cocos2d::EventMouse*)event;
-		if (this->BIsGrabByUser && EM->getMouseButton() == MOUSE_BUTTON_LEFT) {
+		if (this->BIsGrabByUser && EM->getMouseButton() == cocos2d::EventMouse::MouseButton::BUTTON_RIGHT) {
 			this->BIsGrabByUser = false;
 		}
     };

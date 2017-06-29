@@ -1,1 +1,0 @@
-@call "C:\Program Files (x86)\PVS-Studio\x64\PVS-Studio.exe" --cfg "C:\Users\rusbaron\Projects\InventoryTask\cocos2d\cocos\2d\AssetsManager.cpp.PVS-Studio.cfg"

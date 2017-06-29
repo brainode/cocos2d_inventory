@@ -72,7 +72,7 @@ void ArmCell::addEvents(){
     auto listener = cocos2d::EventListenerMouse::create();
     listener->onMouseDown = [this](cocos2d::Event* event) {
         cocos2d::EventMouse* EM = static_cast<cocos2d::EventMouse*>(event);
-        if (EM->getMouseButton() == MOUSE_BUTTON_LEFT) {
+        if (EM->getMouseButton() == cocos2d::EventMouse::MouseButton::BUTTON_LEFT) {
             if(this->bCellIsHit(EM) && !this->bIsCellEmpty())
             {
                 this->BGrabbedFromCell = true;
@@ -81,14 +81,14 @@ void ArmCell::addEvents(){
                 this->clearCell();
             }
         }
-        else if (EM->getMouseButton() == MOUSE_BUTTON_RIGHT)
+        else if (EM->getMouseButton() == cocos2d::EventMouse::MouseButton::BUTTON_RIGHT)
         {
             //if(this->bCellIsHit(EM);
         }
     };
     listener->onMouseUp = [this](cocos2d::Event* event) {
         cocos2d::EventMouse* EM = static_cast<cocos2d::EventMouse*>(event);
-        if (EM->getMouseButton() == MOUSE_BUTTON_LEFT)
+        if (EM->getMouseButton() == cocos2d::EventMouse::MouseButton::BUTTON_LEFT)
         {
             Hero* HePHero = static_cast<Hero*>(this->getParent());
             InventoryContainer* IcPInventory = static_cast<InventoryContainer*>(HePHero->IcPHeroInventory);
